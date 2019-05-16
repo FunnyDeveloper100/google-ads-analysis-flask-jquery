@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+{% block body %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li>
+                <h3>Welcome {{user['given_name']}}!</h3>
+            </li>
+        </ul>
+        <img src="{{user['picture']}}" alt="" width="35" height="35">
+        <a href="/google/logout">
+            <button class="btn btn-danger">Logout</button>
+        </a>
+    </div>
+</nav>
+{{user}}
+{% endblock %}
