@@ -4,15 +4,32 @@ import os
 
 import flask
 
+from config import Config
+from models import UserModel
+from models.db_model import db
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
+from flask_migrate import Migrate
+
+# google auth
 from authlib.client import OAuth2Session
 import google.oauth2.credentials
 import googleapiclient.discovery
 
 import google_auth
 
-app = flask.Flask(__name__)
-app.secret_key = os.environ.get("FN_FLASK_SECRET_KEY", False)
+def create_application():
+    app = flask.Flask(__name__)
+    app.config.from_object(Config)
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.init_app(app)
+    migrate = Migrate(app, db)
+    admin = Admin(app)
+    admin.add_view(ModelView(UserModel, db.session))
 
+    return app
+
+app = create_application()
 app.register_blueprint(google_auth.app)
 
 @app.route('/')
