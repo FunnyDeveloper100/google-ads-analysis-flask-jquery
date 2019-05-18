@@ -11,7 +11,7 @@ class User(db.Model):
     verified_email = db.Column(db.Boolean)
 
     def __repr__(self):
-        return '<User {}>'.format(self.username)
+        return '<User {}>'.format(self.name)
 
     def __init__(self, name, family_name, picture, locale, email, given_name, id, verified_email):
         self.family_name = family_name
