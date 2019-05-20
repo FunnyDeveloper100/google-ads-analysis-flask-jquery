@@ -5,7 +5,7 @@ import os
 import flask
 
 from config import Config
-from models import UserModel
+from models import UserModel, ProjectModel
 from models.db_model import db
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
@@ -17,7 +17,7 @@ import google.oauth2.credentials
 import googleapiclient.discovery
 
 import google_auth
-from sqlquery import sql_edit_insert, sql_query2
+from sqlquery import sql_edit_insert, sql_query2, sql_query
 def create_application():
     app = flask.Flask(__name__)
     app.config.from_object(Config)
@@ -26,6 +26,7 @@ def create_application():
     migrate = Migrate(app, db)
     admin = Admin(app)
     admin.add_view(ModelView(UserModel, db.session))
+    admin.add_view(ModelView(ProjectModel, db.session))
 
     return app
 
@@ -43,8 +44,28 @@ def index():
         else:
             print 'Exist already'
 
+        user_id = user_info['id']
+        projects = ProjectModel.query.filter_by(user_id=user_id).all()
+        print projects
 
         # return '<div>You are currently logged in as ' + user_info['given_name'] + '<div><pre>' + json.dumps(user_info, indent=4) + "</pre>"
-        return flask.render_template('home.html', user=user_info)
+        return flask.render_template('home.html', user=user_info, projects=projects)
 
     return flask.render_template('login.html')
+
+@app.route('/add_project')
+def add_project():
+    #try :
+    print flask.request.args
+    project_name = flask.request.args.get('project_name')
+    country = flask.request.args.get('country')
+    user_info = google_auth.get_user_info()
+    print user_info
+    project = ProjectModel( user_id=user_info['id'], project_name = project_name, country=country)
+    db.session.add(project)
+    db.session.commit()
+#    sql_edit_insert("INSERT INTO project (user_id, project_name, country) VALUES (?,?,?)", (user_info['id'], project_name, country))
+    # except:
+    #     print "add error"
+    # finally:
+    return flask.redirect('/')
