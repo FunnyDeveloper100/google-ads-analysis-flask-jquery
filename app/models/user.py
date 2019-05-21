@@ -1,4 +1,4 @@
-from db_model import db
+from .db_model import db
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -15,3 +15,14 @@ class User(db.Model):
 
     def __repr__(self):
         return self.name
+
+    def __init__(self, name, family_name, picture, locale, email, given_name, id, verified_email, role):
+        self.family_name = family_name
+        self.name = name
+        self.picture = picture
+        self.locale = locale
+        self.email = email
+        self.given_name = given_name
+        self.id = id
+        self.verified_email = verified_email
+        self.role = role

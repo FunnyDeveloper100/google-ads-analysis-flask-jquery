@@ -1,4 +1,4 @@
-from db_model import db
+from .db_model import db
 
 class Project(db.Model):
     __tablename__ = 'project'
