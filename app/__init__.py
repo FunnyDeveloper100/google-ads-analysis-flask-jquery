@@ -1,103 +1,42 @@
-import functools
-import json
-import os
-
-from flask import Flask, render_template, request, redirect, Response
-
-from .config import Config
-
-from flask_admin import Admin, AdminIndexView
-from flask_admin.contrib import sqla
-
+from flask import Flask, render_template
+from config import settings
+from app.auth.controllers import google_auth
+from app.project.controllers import project_app
+from app.auth import auth
+from app.utils.db_models import db
 from flask_migrate import Migrate
+from app.project.models import Project as ProjectModel
 
-#BasicAuth
+# BasicAuth
 from flask_basicauth import BasicAuth
-
-# Google Auth
-from . import google_auth
-
-#Exception
+# Exception
 from werkzeug.exceptions import HTTPException
 
-from . import models
-from .models.db_model import db
+application = Flask(__name__)
+application.config.from_object(settings)
+application.register_blueprint(google_auth)
+application.register_blueprint(project_app)
 
-def create_app():
-    app = Flask(__name__)
-    app.config.from_object(Config)
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['BASIC_AUTH_USERNAME'] = 'admin'
-    app.config['BASIC_AUTH_PASSWORD'] = 'password'
-    db.init_app(app)
-    migrate = Migrate(app, db)
+db.init_app(application)
+migrate = Migrate(application, db)
 
-    return app
+basic_auth = BasicAuth(application)
 
-app = create_app()
+from app.admin import addAdminPanel  # noqa
+addAdminPanel(application)
 
-# set google auth
-app.register_blueprint(google_auth.app)
 
-# basic auth
-basic_auth = BasicAuth(app)
+@application.errorhandler(404)
+def not_found(error):
+    return render_template('404.html'), 404
 
-@app.route('/')
+
+@application.route('/')
 def index():
-    if google_auth.is_logged_in():
-        user_info = google_auth.get_user_info()
-        users = models.UserModel.query.filter_by(email=user_info['email']).all()
-        if len(users) < 1:
-            print('This user is new')
-            user = models.UserModel(user_info['name'], user_info['family_name'], user_info['picture'], user_info['locale'], user_info['email'], user_info['given_name'], user_info['id'],user_info['verified_email'], 0)
-            db.session.add(user)
-            db.session.commit()
-        else:
-            print('This user exist already')
-
+    if auth.is_logged_in():
+        user_info = auth.get_user_info()
         user_id = user_info['id']
-        projects = models.ProjectModel.query.filter_by(user_id=user_id).all()
-        return render_template('home.html', user=user_info, projects=projects)
+        projects = ProjectModel.query.filter_by(user_id=user_id).all()
+        return render_template('project/project.html', user=user_info, projects=projects)  # noqa
 
-    return render_template('login.html')
-
-@app.route('/add_project')
-def add_project():
-    project_name = request.args.get('project_name')
-    country = request.args.get('country')
-    user_info = google_auth.get_user_info()
-    project = models.ProjectModel( user_id=user_info['id'], project_name = project_name, country=country)
-    db.session.add(project)
-    db.session.commit()
-    return redirect('/')
-
-class AuthException(HTTPException):
-    def __init__(self, message):
-        # # python 2
-        # super(AuthException, self).__init__(message, Response(
-        #     message, 401,
-        #     {'WWW-Authenticate': 'Basic realm="Login Required"'}
-        # ))
-        # python 3
-        super().__init__(message, Response(
-            message, 401,
-            {'WWW-Authenticate': 'Basic realm="Login Required"'}
-        ))
-
-
-class ModelView(sqla.ModelView):
-    def is_accessible(self):
-        if not basic_auth.authenticate():
-            raise AuthException('Not authenticated. Are you a administrator?')
-        else:
-            return True
-
-    def inaccessible_callback(self, name, **kwargs):
-        return redirect(basic_auth.challenge())
-
-def addAdminPanel(app):
-    admin = Admin(app)
-    admin.add_view(ModelView(models.UserModel, db.session))
-    admin.add_view(ModelView(models.ProjectModel, db.session))
-
-addAdminPanel(app)
+    return render_template('auth/login.html')

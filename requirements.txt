@@ -2,6 +2,7 @@ alembic==1.0.10
 asn1crypto==0.24.0
 astroid==2.2.5
 Authlib==0.11
+autopep8==1.4.4
 backports.functools-lru-cache==1.5
 cachetools==3.1.0
 certifi==2019.3.9
@@ -34,9 +35,11 @@ MarkupSafe==1.1.1
 mccabe==0.6.1
 numpy==1.16.3
 pandas==0.24.2
+pep8==1.7.1
 pipreqs==0.4.9
 pyasn1==0.4.5
 pyasn1-modules==0.2.5
+pycodestyle==2.5.0
 pycparser==2.19
 pylint==2.3.1
 pylint-flask==0.6
