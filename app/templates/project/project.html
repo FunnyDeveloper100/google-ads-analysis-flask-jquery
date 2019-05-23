@@ -16,7 +16,7 @@
     </nav>
 
     <div class="">
-    <button type="button" class="btn btn-success m-2" data-toggle="modal" data-target="#exampleModal">Add New Project</button>
+        <button type="button" class="btn btn-success m-2" data-toggle="modal" data-target="#exampleModal">Add New Project</button>
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -37,11 +37,10 @@
                 {% endfor %}
             </tbody>
         </table>
-
     </div>
 </div>
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
         <div class="modal-header">
@@ -50,7 +49,7 @@
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <form action={{ url_for('add_project')}}>
+        <form action={{ url_for('project_module.add_project')}}>
             <div class="modal-body">
                 <div class="form-group">
                     <label for="project_name">Project Name</label>
@@ -70,6 +69,6 @@
         </form>
         </div>
     </div>
-    </div>
+</div>
 
 {% endblock %}
