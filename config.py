@@ -21,6 +21,7 @@ class BaseConfig(object):
     AUTHORIZATION_URL = 'https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&prompt=consent'  # noqa
 
     AUTHORIZATION_SCOPE = 'openid email profile'
+    OAUTH_SCOPE = ' https://www.googleapis.com/auth/webmasters.readonly'
 
     AUTH_REDIRECT_URI = str_env("FN_AUTH_REDIRECT_URI", False)
     BASE_URI = str_env("FN_BASE_URI", False)

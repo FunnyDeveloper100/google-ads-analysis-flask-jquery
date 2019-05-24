@@ -17,6 +17,7 @@ import googleapiclient.discovery
 ACCESS_TOKEN_URI = settings.ACCESS_TOKEN_URI
 AUTHORIZATION_URL = settings.AUTHORIZATION_URL
 AUTHORIZATION_SCOPE = settings.AUTHORIZATION_SCOPE
+OAUTH_SCOPE = settings.OAUTH_SCOPE
 AUTH_REDIRECT_URI = settings.AUTH_REDIRECT_URI
 BASE_URI = settings.BASE_URI
 CLIENT_ID = settings.CLIENT_ID
@@ -67,11 +68,34 @@ def no_cache(view):
     return functools.update_wrapper(no_cache_impl, view)
 
 
+def get_sitemaps():
+    credentials = build_credentials()
+    webmasters_service = googleapiclient.discovery.build(
+        'webmasters', 'v3', credentials=credentials
+    )
+    # Retrieve list of properties in account
+    site_list = webmasters_service.sites().list().execute()
+
+    # Filter for verified websites
+    verified_sites_urls = [s['siteUrl'] for s in site_list['siteEntry']
+                           if s['permissionLevel'] != 'siteUnverifiedUser'
+                           and s['siteUrl'][:4] == 'http']
+
+    # Printing the URLs of all websites you are verified for.
+    for site_url in verified_sites_urls:
+        print(site_url)
+    # Retrieve list of sitemaps submitted
+    sitemaps = webmasters_service.sitemaps().list(siteUrl=site_url).execute()
+    if 'sitemap' in sitemaps:
+        sitemap_urls = [s['path'] for s in sitemaps['sitemap']]
+        print("  " + "\n  ".join(sitemap_urls))
+
+
 @google_auth.route('/login')
-@no_cache
+# @no_cache
 def login():
     session = OAuth2Session(CLIENT_ID, CLIENT_SECRET,
-                            scope=AUTHORIZATION_SCOPE,
+                            scope=AUTHORIZATION_SCOPE + OAUTH_SCOPE,
                             redirect_uri=AUTH_REDIRECT_URI)
 
     uri, state = session.authorization_url(AUTHORIZATION_URL)
@@ -83,22 +107,23 @@ def login():
 
 
 @google_auth.route('/auth')
-@no_cache
+# @no_cache
 def google_auth_redirect():
-    req_state = flask.request.args.get('state', default=None, type=None)
+    req_state = request.args.get('state', default=None, type=None)
+    code = request.args.get('code', default=None, type=None)
 
     if req_state != flask.session[AUTH_STATE_KEY]:
         response = flask.make_response('Invalid state parameter', 401)
         return response
 
     session = OAuth2Session(CLIENT_ID, CLIENT_SECRET,
-                            scope=AUTHORIZATION_SCOPE,
+                            scope=AUTHORIZATION_SCOPE + OAUTH_SCOPE,
                             state=flask.session[AUTH_STATE_KEY],
                             redirect_uri=AUTH_REDIRECT_URI)
 
     oauth2_tokens = session.fetch_access_token(
         ACCESS_TOKEN_URI,
-        authorization_response=flask.request.url
+        authorization_response=request.url
     )
 
     flask.session[AUTH_TOKEN_KEY] = oauth2_tokens
@@ -125,11 +150,13 @@ def google_auth_redirect():
     else:
         print('This user exist already')
 
+    get_sitemaps()
+
     return flask.redirect(BASE_URI, code=302)
 
 
 @google_auth.route('/logout')
-@no_cache
+# @no_cache
 def logout():
     flask.session.pop(AUTH_TOKEN_KEY, None)
     flask.session.pop(AUTH_STATE_KEY, None)
