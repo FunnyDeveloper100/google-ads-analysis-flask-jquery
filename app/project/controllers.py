@@ -24,7 +24,6 @@ def add_project():
     if (project):
         end_date = date.today()
         start_date = end_date - timedelta(days=365)
-        print(end_date, start_date)
         store_search_terms(project, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"))
 
     return redirect('/')
@@ -37,7 +36,6 @@ def view_project(id):
     if (range):
         params = []
         params = range.split("~")
-        print(range, params[0], params[1])
         store_search_terms(project, params[0], params[1])
 
     terms = GscSearchTermModel.query.filter_by(project_id=id).all()

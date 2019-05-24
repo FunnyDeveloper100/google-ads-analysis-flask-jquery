@@ -77,10 +77,10 @@ def get_service():
 
 
 @google_auth.route('/login')
-# @no_cache
+@no_cache
 def login():
     session = OAuth2Session(CLIENT_ID, CLIENT_SECRET,
-                            scope=AUTHORIZATION_SCOPE + OAUTH_SCOPE,
+                            scope=AUTHORIZATION_SCOPE,
                             redirect_uri=AUTH_REDIRECT_URI)
 
     uri, state = session.authorization_url(AUTHORIZATION_URL)
@@ -92,7 +92,7 @@ def login():
 
 
 @google_auth.route('/auth')
-# @no_cache
+@no_cache
 def google_auth_redirect():
     req_state = request.args.get('state', default=None, type=None)
 
@@ -101,7 +101,7 @@ def google_auth_redirect():
         return response
 
     session = OAuth2Session(CLIENT_ID, CLIENT_SECRET,
-                            scope=AUTHORIZATION_SCOPE + OAUTH_SCOPE,
+                            scope=AUTHORIZATION_SCOPE,
                             state=flask.session[AUTH_STATE_KEY],
                             redirect_uri=AUTH_REDIRECT_URI)
 
@@ -138,7 +138,7 @@ def google_auth_redirect():
 
 
 @google_auth.route('/logout')
-# @no_cache
+@no_cache
 def logout():
     flask.session.pop(AUTH_TOKEN_KEY, None)
     flask.session.pop(AUTH_STATE_KEY, None)
