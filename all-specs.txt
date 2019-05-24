@@ -1,0 +1,116 @@
+I need an application built using either Django or Flask.
+
+The purpose will be to get Google Ads search term data from Google ads and Search Console search terms data from Google search console and match them up in a single view/page.
+
+Google Ads allows us to see conversion data for the search terms (conversions and conversion values).
+Search console allows us to see the search POSITION of keywords.
+
+This app will essentially be a pivot table allowing users to merge those two data sets on the search term so both the conversions, conversion value and position can be seen in one view.
+
+
+App Flow:
+***********
+User signs up with Google account (users table) and account is created.
+
+User creates a "Project" where they can name it and where they pick a single target country. User can create multiple projects. A project is just a container. It will be a single page view where they will essentially see a picot table combining the two data sources.
+
+User Links their Google Ads, Search Console and optionally Google analytics accounts using the respective APIs. User must link the first two to be able to continue. There will be a single search console site and a single AdWords account linked per project/view/page.
+
+App pulls the search term report (not keywords, but search terms) from AdWords. (first table). It only pulls search terms with conversions. The search term, the number of conversions and the total conversion value should be pulled as well as impressions, clicks and CTR.
+
+App then pulls all the search console keyword position data for selected country for the past 12 months. (second table)
+
+There will be 6 date ranges to query in each spource. The past 7 days, the past 28 days, the past 3 months, the past 6 months, the past 12 months and the past 16 months.
+
+Site shows the list of AdWords search terms ordered by conversion volume (number of conversion) and matches with the search console search term data (Join) to show the keyword position of those AdWords search terms. Only the search term position data for the AdWords converting search terms is needed.
+
+
+*****************************************************************
+AdWords Search Term (Joined on search Console Search Term) | Average Position | Conversions | Conversion Value
+
+Keyword x - 9 - 15 - 12980
+Keyword y - 3 - 12 - 5770
+.
+.
+.
+
+There will be a date range switcher between the 6 date ranges listed above.
+
+Additional Requirements:
+*************************
+Users should be able to sort by position or by number of conversions.
+
+There should be a filter option to sort where conversions is greater than or less than a certain number as well as a filter for position above or below a certain number.
+
+There should be a weighted sort filter/option to sort the keywords by weighted value https://moz.com/blog/build-your-own-weighted-sort
+
+The data/view should be stored for viewing when logged in again, exportable to excel CSV and there should be an option to refresh the data.
+
+User can create multiple projects with the given workflow.
+
+App should be an app/module in Flask/Django as further additions to the site will be added over time.
+
+
+Build Your Own Weighted Sort (GA Style)
+https://moz.com
+
+MileStones:
+
+Milestone 1 - $200 - User and project setup. Flask App set up and live with Google authentication user sign up, ads account linked and search console account linked. Users and authentication visible in admin panel. Entire app dB pseudoschema should be supplied here. User should be able to create multiple (at this point empty) projects.
+
+Milestone 2 - $250 - search term data from both sources pulled, stored, and displayed.
+
+Milestone 3 - $300 - merge/pivot/join combination of both sources in a single view.
+
+Milestone 4 - $200 - Additional requirements (weighted sort, export etc)
+
+Milestone 5 - $100 +$150 bonus- Polishing & deployment
+
+
+About Client:
+https://www.linkedin.com/in/dave-davis-05708812/
+https://www.redflymarketing.com/about-us/
+
+https://celebrationsaunas.com
+
+export FN_AUTH_REDIRECT_URI=http://localhost:8001/google/auth
+export FN_BASE_URI=http://localhost:8001
+export FN_CLIENT_ID=927775873403-dgt1v0mt00p3o83tikko5htkav11jgtt
+export FN_CLIENT_SECRET=d8jGMukaWewIGMthMMS3lhtk
+
+export FLASK_APP=app.py
+export FLASK_DEBUG=1
+export FN_FLASK_SECRET_KEY=d8jGMukaWewIGMthMMS3lhtk
+
+
+python -m flask run -p 8001
+
+
+
+
+Search Console query
+
+{
+  "startDate": string,
+  "endDate": string,
+  "dimensions": [
+    string
+  ],
+  "searchType": string,
+  "dimensionFilterGroups": [
+    {
+      "groupType": string,
+      "filters": [
+        {
+          "dimension": string,
+          "operator": string,
+          "expression": string
+        }
+      ]
+    }
+  ],
+  "aggregationType": string,
+  "rowLimit": integer,
+  "startRow": integer
+}
+
