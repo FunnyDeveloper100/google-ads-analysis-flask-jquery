@@ -4,6 +4,7 @@ from flask import Blueprint, request, render_template, \
 from app.utils.db_models import db
 from flask_basicauth import BasicAuth
 from authlib.client import OAuth2Session
+from utils.search_console import get_search_terms
 
 from app.auth.models import User as UserModel
 from config import settings
@@ -68,27 +69,12 @@ def no_cache(view):
     return functools.update_wrapper(no_cache_impl, view)
 
 
-def get_sitemaps():
+def get_service():
     credentials = build_credentials()
     webmasters_service = googleapiclient.discovery.build(
         'webmasters', 'v3', credentials=credentials
     )
-    # Retrieve list of properties in account
-    site_list = webmasters_service.sites().list().execute()
-
-    # Filter for verified websites
-    verified_sites_urls = [s['siteUrl'] for s in site_list['siteEntry']
-                           if s['permissionLevel'] != 'siteUnverifiedUser'
-                           and s['siteUrl'][:4] == 'http']
-
-    # Printing the URLs of all websites you are verified for.
-    for site_url in verified_sites_urls:
-        print(site_url)
-    # Retrieve list of sitemaps submitted
-    sitemaps = webmasters_service.sitemaps().list(siteUrl=site_url).execute()
-    if 'sitemap' in sitemaps:
-        sitemap_urls = [s['path'] for s in sitemaps['sitemap']]
-        print("  " + "\n  ".join(sitemap_urls))
+    return webmasters_service
 
 
 @google_auth.route('/login')
@@ -110,7 +96,6 @@ def login():
 # @no_cache
 def google_auth_redirect():
     req_state = request.args.get('state', default=None, type=None)
-    code = request.args.get('code', default=None, type=None)
 
     if req_state != flask.session[AUTH_STATE_KEY]:
         response = flask.make_response('Invalid state parameter', 401)
@@ -150,7 +135,9 @@ def google_auth_redirect():
     else:
         print('This user exist already')
 
-    get_sitemaps()
+    service = get_service()
+    get_sitemaps(webmasters_service=service)
+    get_search_terms(service=service, property_uri="https://celebrationsaunas.com")  # noqa
 
     return flask.redirect(BASE_URI, code=302)
 
