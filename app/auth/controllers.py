@@ -4,7 +4,6 @@ from flask import Blueprint, request, render_template, \
 from app.utils.db_models import db
 from flask_basicauth import BasicAuth
 from authlib.client import OAuth2Session
-from utils.search_console import get_search_terms
 
 from app.auth.models import User as UserModel
 from config import settings
@@ -134,10 +133,6 @@ def google_auth_redirect():
         db.session.commit()
     else:
         print('This user exist already')
-
-    service = get_service()
-    get_sitemaps(webmasters_service=service)
-    get_search_terms(service=service, property_uri="https://celebrationsaunas.com")  # noqa
 
     return flask.redirect(BASE_URI, code=302)
 

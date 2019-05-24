@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block body %}
-<div class="offset-md-2 col-md-8" >
+<div >
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
@@ -20,19 +20,23 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                <th scope="col-md-2">No</th>
-                <th scope="col-md-6">Name</th>
-                <th scope="col-md-4">Country</th>
-                <th scope="col-md-4">More</th>
+                <th scope="col-md-1">No</th>
+                <th scope="col-md-3">Name</th>
+                <th scope="col-md-3">Property Url</th>
+                <th scope="col-md-3">Country</th>
+                <th scope="col-md-2">More</th>
                 </tr>
             </thead>
             <tbody>
                 {% for project in projects %}
                     <tr>
-                        <th scope="row">{{ project.id }}</th>
+                    <form action = {{ url_for('project_module.view_project', id=project.id ) }}>
+                        <th scope="row" name="project_id" >{{ loop.index }}</th>
                         <td>{{ project.project_name }}</td>
+                        <td>{{ project.property_url }}</td>
                         <td>{{ project.country }}</td>
-                        <td><button class="btn btn-outline-dark btn-sm">View</button></td>
+                        <td><button type="submit" class="btn btn-outline-dark btn-sm">View</button></td>
+                    </form>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -54,6 +58,10 @@
                 <div class="form-group">
                     <label for="project_name">Project Name</label>
                     <input type="text" class="form-control" name="project_name" placeholder="New project name">
+                </div>
+                <div class="form-group">
+                    <label for="property_url">Property Url</label>
+                    <input type="text" class="form-control" name="property_url" placeholder="e.g. http://example.com">
                 </div>
                 <div class="form-group">
                     <label for="country">Country</label>

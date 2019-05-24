@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+{% block body %}
+ <div>
+     <div class="container mt-10">
+         <h1>{{ project.project_name }}</h1>
+        <span>{{ project.country }}</span>
+        <p>{{ project.property_url }}</p>
+    </div>
+    <div class="text-center"> <h2>Google Search Console Keywords </h2> </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+            <th scope="col-md-2">No</th>
+            <th scope="col-md-6">Keys</th>
+            <th scope="col-md-4">Position</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for row in terms %}
+                <tr>
+                    <th scope="row" name="" >{{ loop.index }}</th>
+                    <td>{{ row.keys }}</td>
+                    <td>{{ "%.1f"|format(row.position) }}</td>
+                </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+ </div>
+{% endblock %}
