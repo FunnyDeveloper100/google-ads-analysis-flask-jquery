@@ -6,6 +6,7 @@ from app.project.models import GscSearchTerm as GscSearchTermModel
 
 from app.utils.db_models import db
 from app.utils.search_console import get_search_terms
+from datetime import date, timedelta
 
 project_app = Blueprint('project_module', __name__, url_prefix='/project')
 
@@ -21,7 +22,10 @@ def add_project():
 
     # first pull data and store to database
     if (project):
-        store_search_terms(project)
+        end_date = date.today()
+        start_date = end_date - timedelta(days=365)
+        print(end_date, start_date)
+        store_search_terms(project, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"))
 
     return redirect('/')
 
@@ -41,6 +45,7 @@ def view_project(id):
 
 def store_search_terms(project, start_date, end_date):
     service = auth.get_service()
+
     response = get_search_terms(service, project.property_url,  start_date, end_date)
     if 'rows' in response:
         for row in response['rows']:
