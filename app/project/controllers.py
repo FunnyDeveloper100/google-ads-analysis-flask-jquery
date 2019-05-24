@@ -28,12 +28,20 @@ def add_project():
 @project_app.route('/view/<id>')
 def view_project(id):
     project = ProjectModel.query.filter_by(id=id).first()
+    range = ""
+    range = request.args.get('daterange')
+    if (range):
+        params = []
+        params = range.split("~")
+        print(range, params[0], params[1])
+        store_search_terms(project, params[0], params[1])
+
     terms = GscSearchTermModel.query.filter_by(project_id=id).all()
     return render_template('project/project_detail.html', project=project, terms=terms)
 
-def store_search_terms(project):
+def store_search_terms(project, start_date, end_date):
     service = auth.get_service()
-    response = get_search_terms(service, project.property_url, "2019-05-01", "2019-05-05")
+    response = get_search_terms(service, project.property_url,  start_date, end_date)
     if 'rows' in response:
         for row in response['rows']:
             insert_row(row, project.id)
