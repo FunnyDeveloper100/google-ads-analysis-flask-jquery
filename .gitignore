@@ -106,3 +106,4 @@ venv.bak/
 sqlite3.db
 script.txt
 migrations/
+all-specs.txt

@@ -1,0 +1,60 @@
+{% extends 'layout.html' %}
+{% block body %}
+ <div>
+     <div class="container mt-10 flex">
+        <a href="/" class="btn btn-link"> Back </a>
+        <p>Project name: <b>{{ project.project_name }}</b></p>
+        <p>Country: <b>{{ project.country }}</b></p>
+        <p>Property url: <b>{{ project.property_url }}</b></p>
+
+        <form action={{ url_for('project_module.view_project', id=project.id ) }}>
+            <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;" class="col-md-4">
+                <i class="fa fa-calendar"></i>&nbsp;
+                <input name="daterange" class="border-0"></input> <i class="fa fa-caret-down"></i>
+            </div>
+            <button type="submit" class="inline btn-outline-dark btn-sm mt-2">Load</button>
+        </form>
+
+    </div>
+    <div class="text-center"> <h2>Google Search Console Keywords </h2> </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col-md-2">No</th>
+                <th scope="col-md-6">Keys</th>
+                <th scope="col-md-4">Position</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for row in terms %}
+                <tr>
+                    <th scope="row" name="" >{{ loop.index }}</th>
+                    <td>{{ row.keys }}</td>
+                    <td>{{ "%.1f"|format(row.position) }}</td>
+                </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+    <div class="m-2">
+        <div class="text-center"> <h2>Google Adwords Search Terms </h2> </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col-md-2">No</th>
+                    <th scope="col-md-6">Keys</th>
+                    <th scope="col-md-4">Position</th>
+                </tr>
+            </thead>
+            <tbody>
+                    {% for row in terms %}
+                    <tr>
+                        <th scope="row" name="" >{{ loop.index }}</th>
+                        <td>{{ row.keys }}</td>
+                        <td>{{ "%.1f"|format(row.position) }}</td>
+                    </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+ </div>
+{% endblock %}

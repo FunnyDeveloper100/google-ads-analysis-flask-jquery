@@ -67,6 +67,14 @@ def no_cache(view):
     return functools.update_wrapper(no_cache_impl, view)
 
 
+def get_service():
+    credentials = build_credentials()
+    webmasters_service = googleapiclient.discovery.build(
+        'webmasters', 'v3', credentials=credentials
+    )
+    return webmasters_service
+
+
 @google_auth.route('/login')
 @no_cache
 def login():
@@ -85,7 +93,7 @@ def login():
 @google_auth.route('/auth')
 @no_cache
 def google_auth_redirect():
-    req_state = flask.request.args.get('state', default=None, type=None)
+    req_state = request.args.get('state', default=None, type=None)
 
     if req_state != flask.session[AUTH_STATE_KEY]:
         response = flask.make_response('Invalid state parameter', 401)
@@ -98,7 +106,7 @@ def google_auth_redirect():
 
     oauth2_tokens = session.fetch_access_token(
         ACCESS_TOKEN_URI,
-        authorization_response=flask.request.url
+        authorization_response=request.url
     )
 
     flask.session[AUTH_TOKEN_KEY] = oauth2_tokens
