@@ -1,9 +1,9 @@
 .btn-google {
-    width: 203px
+    width: 203px;
 }
 
 .container-div {
-    text-align: center
+    text-align: center;
 }
 
 ul.tab-nav {
@@ -12,13 +12,13 @@ ul.tab-nav {
     padding-left: 10px;
     padding-bottom: 4px;
     margin: 0;
-  }
+}
 
-  ul.tab-nav li {
+ul.tab-nav li {
     display: inline;
-  }
+}
 
-  ul.tab-nav li a.button-tab {
+ul.tab-nav li a.button-tab {
     border-width: 1px 1px 0 1px;
     border-style: solid;
     border-color: #d7d7d7;
@@ -28,34 +28,33 @@ ul.tab-nav {
     border-radius: 5px 5px 0 0;
     color: inherit;
     text-decoration: none;
-  }
+}
 
-  ul.tab-nav li a.active-tab.button-tab {
+ul.tab-nav li a.active-tab.button-tab {
     border-bottom: 1px solid #fff;
     background-color: #fff;
-  }
+}
 
-  .tab-container {
+.tab-container {
     padding: 20px;
-  }
+}
 
-  .tab-content {
+.tab-content {
     padding: 20px;
     border: 1px solid #d7d7d7;
     border-top: none;
     border-radius: 0 0 5px 5px;
     display: none;
-  }
+}
 
-  .tab-content h3 {
+.tab-content h3 {
     margin: 0;
     padding-bottom: 20px;
-  }
+}
 
-  .active {
-    display: block;
-  }
-
+.active-content {
+    display: block !important;
+}
 
 #reportrange {
     display: flex;

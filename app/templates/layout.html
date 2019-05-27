@@ -31,6 +31,7 @@
             $('#gsc_table').DataTable();
             $('#gads_table').DataTable();
         } );
+
         $(function() {
 
             var start = moment().subtract(365, 'days');
@@ -63,8 +64,10 @@
         tabButton.map(button => {
             button.addEventListener("click", () => {
                 let href = button.getAttribute("href");
-                document.querySelector(".active").classList.remove("active");
-                document.querySelector(href).classList.add("active");
+
+                document.querySelector(".active-content").classList.remove("active-content");
+                document.querySelector(href).classList.add("active-content");
+
                 document.querySelector(".active-tab").classList.remove("active-tab");
                 button.classList.add("active-tab");
             });
