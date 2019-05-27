@@ -1,60 +1,98 @@
 {% extends 'layout.html' %}
 {% block body %}
- <div>
-     <div class="container mt-10 flex">
+<div>
+    <div class="container">
         <a href="/" class="btn btn-link"> Back </a>
         <p>Project name: <b>{{ project.project_name }}</b></p>
         <p>Country: <b>{{ project.country }}</b></p>
         <p>Property url: <b>{{ project.property_url }}</b></p>
-
         <form action={{ url_for('project_module.view_project', id=project.id ) }}>
-            <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;" class="col-md-4">
-                <i class="fa fa-calendar"></i>&nbsp;
-                <input name="daterange" class="border-0"></input> <i class="fa fa-caret-down"></i>
+            <div id="reportrange" >
+                class="col-md-3">
+                <i class="fa fa-calendar d-inline-block"></i>&nbsp;
+                <input name="daterange" class="w-75 mw-100 d-inline-block border-0"></input> <i class="fa fa-caret-down"></i>
             </div>
-            <button type="submit" class="inline btn-outline-dark btn-sm mt-2">Load</button>
+            <button type="submit" class="btn-outline-dark btn-sm mt-2 d-inline-block">New Load</button>
         </form>
-
     </div>
-    <div class="text-center"> <h2>Google Search Console Keywords </h2> </div>
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th scope="col-md-2">No</th>
-                <th scope="col-md-6">Keys</th>
-                <th scope="col-md-4">Position</th>
-            </tr>
-        </thead>
-        <tbody>
-                {% for row in terms %}
-                <tr>
-                    <th scope="row" name="" >{{ loop.index }}</th>
-                    <td>{{ row.keys }}</td>
-                    <td>{{ "%.1f"|format(row.position) }}</td>
-                </tr>
-                {% endfor %}
-        </tbody>
-    </table>
-    <div class="m-2">
-        <div class="text-center"> <h2>Google Adwords Search Terms </h2> </div>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col-md-2">No</th>
-                    <th scope="col-md-6">Keys</th>
-                    <th scope="col-md-4">Position</th>
-                </tr>
-            </thead>
-            <tbody>
-                    {% for row in terms %}
+
+    <div class="tab-container">
+        <ul class="tab-nav">
+            <li>
+                <a class="button-tab active-tab" href="#overview">
+                    Over View
+                </a>
+            </li>
+            <li>
+                <a class="button-tab" href="#gsc">
+                    Search Console Keys
+                </a>
+            </li>
+            <li>
+                <a class="button-tab" href="#gads">
+                    Google Ads
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content active" id="overview">
+            <h3>Over View</h3>
+            Over View
+        </div>
+
+        <div class="tab-content" id="gsc">
+            <h3>Search Console Keys</h3>
+
+            <table id="gsc_table" class="table table-hover">
+                <thead>
                     <tr>
-                        <th scope="row" name="" >{{ loop.index }}</th>
+                        <th scope="col-md-2">No</th>
+                        <th scope="col-md-6">Keys</th>
+                        <th scope="col-md-4">Position</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in gsc_keys %}
+                    <tr>
+                        <th scope="row" name="">{{ loop.index }}</th>
                         <td>{{ row.keys }}</td>
                         <td>{{ "%.1f"|format(row.position) }}</td>
                     </tr>
                     {% endfor %}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-content" id="gads">
+            <h3>Google Ads Search Terms</h3>
+            <table id="gads_table" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col-md-1">No</th>
+                        <th scope="col-md-2">Search Terms</th>
+                        <th scope="col-md-2">Conversions</th>
+                        <th scope="col-md-1">Conversion Value</th>
+                        <th scope="col-md-2">Impressions</th>
+                        <th scope="col-md-2">Clicks</th>
+                        <th scope="col-md-2">CTR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in gads_search_terms %}
+                    <tr>
+                        <th scope="row" name="">{{ loop.index }}</th>
+                        <td>{{ row.search_terms }}</td>
+                        <td>{{ row.conversions }}</td>
+                        <td>{{ row.conversion_value }}</td>
+                        <td>{{ row.impressions }}</td>
+                        <td>{{ row.clicks }}</td>
+                        <td>{{ row.ctr }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
- </div>
+</div>
+
 {% endblock %}

@@ -29,7 +29,7 @@ def execute_request(service, property_uri, request, max_retries=5, wait_interval
     return response
 
 
-def get_search_terms(service, property_uri, start_date, end_date, country="world wide", max_rows=250, pages=[]):
+def get_search_terms(service, property_uri, start_date, end_date, country="world wide", max_rows=2500, pages=[]):
 
     start_date = datetime.strptime(start_date, "%Y-%m-%d")
     end_date = datetime.strptime(end_date, "%Y-%m-%d")

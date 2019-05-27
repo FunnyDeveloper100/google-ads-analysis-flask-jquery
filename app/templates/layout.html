@@ -7,7 +7,9 @@
         <link rel="stylesheet" href="/static/bootstrap-social.css" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
         <link rel="stylesheet" href="/static/styles.css" />
+
     </head>
     <body>
         <div class="offset-md-2 col-md-8">
@@ -22,10 +24,16 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     <script type="text/javascript">
+        $(document).ready(function() {
+            $('#gsc_table').DataTable();
+            $('#gads_table').DataTable();
+        } );
         $(function() {
 
-            var start = moment().subtract(29, 'days');
+            var start = moment().subtract(365, 'days');
             var end = moment();
 
             function cb(start, end) {
@@ -47,6 +55,21 @@
             }, cb);
             cb(start, end);
         });
+
+        let tabButton = [].slice.call(
+            document.querySelectorAll("ul.tab-nav li a.button-tab")
+        );
+
+        tabButton.map(button => {
+            button.addEventListener("click", () => {
+                let href = button.getAttribute("href");
+                document.querySelector(".active").classList.remove("active");
+                document.querySelector(href).classList.add("active");
+                document.querySelector(".active-tab").classList.remove("active-tab");
+                button.classList.add("active-tab");
+            });
+        });
+
         </script>
     </body>
 </html>
