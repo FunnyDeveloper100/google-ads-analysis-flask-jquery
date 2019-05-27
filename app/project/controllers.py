@@ -28,6 +28,7 @@ def add_project():
         end_date = date.today()
         start_date = end_date - timedelta(days=365)
         store_search_terms(project, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"))
+        pull_gads_data(project, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"))
 
     return redirect('/')
 
