@@ -4,7 +4,7 @@ from flask_admin.contrib import sqla
 
 from werkzeug.exceptions import HTTPException
 from app.auth.models import User as UserModel
-from app.project.models import Project as ProjectModel, GscSearchTerm as GscSearchTermModel
+from app.project.models import Project, GscSearchTerm, GadsSearchTerm
 from app.utils.db_models import db
 
 # BasicAuth
@@ -14,8 +14,9 @@ from app import basic_auth
 def addAdminPanel(app):
     admin = Admin(app)
     admin.add_view(ModelView(UserModel, db.session))
-    admin.add_view(ModelView(ProjectModel, db.session))
-    admin.add_view(ModelView(GscSearchTermModel, db.session))
+    admin.add_view(ModelView(Project, db.session))
+    admin.add_view(ModelView(GscSearchTerm, db.session))
+    admin.add_view(ModelView(GadsSearchTerm, db.session))
 
 
 class ModelView(sqla.ModelView):
