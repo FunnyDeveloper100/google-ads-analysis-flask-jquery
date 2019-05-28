@@ -10,3 +10,7 @@ def string_to_int(_str):
 def percent_to_float(_str):
     s = _str.strip('%')
     return float(s)
+
+def dollar_to_float(_str):
+    res = _str.replace('$','')
+    return string_to_float(res)

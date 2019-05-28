@@ -37,7 +37,32 @@
 
         <div class="tab-content active-content" id="overview">
             <h3>Over View</h3>
-            Over View
+            <table id="overview" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col-md-2">No</th>
+                            <th scope="col-md-2">Keys</th>
+                            <th scope="col-md-6">Search Term</th>
+                            <th scope="col-md-4">Average Position</th>
+                            <th scope="col-md-4">Conversions</th>
+                            <th scope="col-md-4">Conversion Value</th>
+                            <th scope="col-md-4">Conversion Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in joined_data %}
+                        <tr>
+                            <th scope="row" name="">{{ loop.index }}</th>
+                            <td>{{ row.GscSearchTerm.keys }}</td>
+                            <td>{{ row.GadsSearchTerm.search_terms }}</td>
+                            <td>{{ "%.1f"|format(row.GscSearchTerm.position) }}</td>
+                            <td>{{ row.GadsSearchTerm.conversions }}</td>
+                            <td>{{ row.GadsSearchTerm.conversion_value }}</td>
+                            <td>{{ row.GadsSearchTerm.conversion_rate }}%</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
         </div>
 
         <div class="tab-content" id="gsc">
@@ -75,6 +100,8 @@
                         <th scope="col-md-2">Impressions</th>
                         <th scope="col-md-2">Clicks</th>
                         <th scope="col-md-2">CTR</th>
+                        <th scope="col-md-2">Avg. CPC</th>
+                        <th scope="col-md-2">Conv. Rate</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -87,6 +114,8 @@
                         <td>{{ row.impressions }}</td>
                         <td>{{ row.clicks }}</td>
                         <td>{{ row.ctr }}%</td>
+                        <td>$0.0</td>
+                        <td>0.0%</td>
                     </tr>
                     {% endfor %}
                 </tbody>
