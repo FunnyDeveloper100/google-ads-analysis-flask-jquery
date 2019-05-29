@@ -58,7 +58,7 @@ def view_project(id):
 
     gsc_keys = GscSearchTerm.query.filter_by(project_id=id).all()
     gads_search_terms = GadsSearchTerm.query.filter_by(project_id=id).all()
-    joined_data = join_tables()
+    joined_data = join_tables(id)
     return render_template('project/project_detail.html', project=project, gsc_keys=gsc_keys, gads_search_terms=gads_search_terms, joined_data = joined_data)
 
 @project_app.route('/delete_project/<id>/')
@@ -86,7 +86,7 @@ def insert_gsc_row(row, project_id):
 
 def pull_gads_data(project, start_date, end_date):
     GadsSearchTerm.query.filter_by(project_id=project.id).delete()
-    gads_data = getAdsData('Search Term Test Data.csv')
+    gads_data = getAdsData('gads_search_terms.csv')
 
     for index, row in gads_data.iterrows():
         store_gads_data(project.id, row)
@@ -106,7 +106,7 @@ def store_gads_data(_id, _data):
     db.session.commit()
 
 
-def join_tables():
+def join_tables(id):
     _table = GadsSearchTerm.query.outerjoin(GscSearchTerm, GscSearchTerm.keys == GadsSearchTerm.search_terms).add_columns(
         GadsSearchTerm.search_terms,
         GadsSearchTerm.conversions,
@@ -114,5 +114,5 @@ def join_tables():
         GadsSearchTerm.conversion_rate,
         GadsSearchTerm.avg_cpc,
         GscSearchTerm.position
-        ).all()
+        ).filter(GadsSearchTerm.project_id==id, GscSearchTerm.project_id==id).all()
     return _table
