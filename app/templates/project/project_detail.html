@@ -16,112 +16,33 @@
         </form>
     </div>
 
-    <div class="tab-container">
-        <ul class="tab-nav">
-            <li>
-                <a class="button-tab active-tab" href="#overview">
-                    Over View
-                </a>
-            </li>
-            <li>
-                <a class="button-tab" href="#gsc">
-                    Search Console Keys
-                </a>
-            </li>
-            <li>
-                <a class="button-tab" href="#gads">
-                    Google Ads
-                </a>
-            </li>
-        </ul>
-
-        <div class="tab-content active-content" id="overview">
-            <h3>Over View</h3>
-            <table id="overview" class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col-md-2">No</th>
-                            <th scope="col-md-2">Keys</th>
-                            <th scope="col-md-6">Search Term</th>
-                            <th scope="col-md-4">Average Position</th>
-                            <th scope="col-md-4">Conversions</th>
-                            <th scope="col-md-4">Conversion Value</th>
-                            <th scope="col-md-4">Conversion Rate</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for row in joined_data %}
-                        <tr>
-                            <th scope="row" name="">{{ loop.index }}</th>
-                            <td>{{ row.GscSearchTerm.keys }}</td>
-                            <td>{{ row.GadsSearchTerm.search_terms }}</td>
-                            <td>{{ "%.1f"|format(row.GscSearchTerm.position) }}</td>
-                            <td>{{ row.GadsSearchTerm.conversions }}</td>
-                            <td>{{ row.GadsSearchTerm.conversion_value }}</td>
-                            <td>{{ row.GadsSearchTerm.conversion_rate }}%</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-        </div>
-
-        <div class="tab-content" id="gsc">
-            <h3>Search Console Keys</h3>
-
-            <table id="gsc_table" class="table table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col-md-2">No</th>
-                        <th scope="col-md-6">Keys</th>
-                        <th scope="col-md-4">Position</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in gsc_keys %}
-                    <tr>
-                        <th scope="row" name="">{{ loop.index }}</th>
-                        <td>{{ row.keys }}</td>
-                        <td>{{ "%.1f"|format(row.position) }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <div class="tab-content" id="gads">
-            <h3>Google Ads Search Terms</h3>
-            <table id="gads_table" class="table table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col-md-1">No</th>
-                        <th scope="col-md-2">Search Terms</th>
-                        <th scope="col-md-2">Conversions</th>
-                        <th scope="col-md-1">Conversion Value</th>
-                        <th scope="col-md-2">Impressions</th>
-                        <th scope="col-md-2">Clicks</th>
-                        <th scope="col-md-2">CTR</th>
-                        <th scope="col-md-2">Avg. CPC</th>
-                        <th scope="col-md-2">Conv. Rate</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in gads_search_terms %}
-                    <tr>
-                        <th scope="row" name="">{{ loop.index }}</th>
-                        <td>{{ row.search_terms }}</td>
-                        <td>{{ row.conversions }}</td>
-                        <td>{{ row.conversion_value }}</td>
-                        <td>{{ row.impressions }}</td>
-                        <td>{{ row.clicks }}</td>
-                        <td>{{ row.ctr }}%</td>
-                        <td>$0.0</td>
-                        <td>0.0%</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <h3 class="text-center">Google Adwords</h3>
+    <table id="overview" class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col-md-2">No</th>
+                <th scope="col-md-6">Search Term</th>
+                <th scope="col-md-4">Average Position</th>
+                <th scope="col-md-4">Average CPC</th>
+                <th scope="col-md-4">Conversions</th>
+                <th scope="col-md-4">Conversion Value</th>
+                <th scope="col-md-4">Conversion Rate</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in joined_data %}
+            <tr>
+                <th scope="row" name="">{{ loop.index }}</th>
+                <td>{{ row.search_terms }}</td>
+                <td>{{ "%.1f"|format(row.position) if row.position else "0.0" }}</td>
+                <td>${{ "%.1f"|format(row.avg_cpc) }}</td>
+                <td>{{ row.conversions }}</td>
+                <td>{{ row.conversion_value }}</td>
+                <td>{{ row.conversion_rate }}%</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
 {% endblock %}

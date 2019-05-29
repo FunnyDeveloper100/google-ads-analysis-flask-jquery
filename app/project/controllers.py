@@ -66,7 +66,7 @@ def insert_gsc_row(row, project_id):
 
 def pull_gads_data(project, start_date, end_date):
     GadsSearchTerm.query.filter_by(project_id=project.id).delete()
-    gads_data = getAdsData('googleads.csv')
+    gads_data = getAdsData('Search Term Test Data.csv')
 
     for index, row in gads_data.iterrows():
         store_gads_data(project.id, row)
@@ -74,12 +74,12 @@ def pull_gads_data(project, start_date, end_date):
 def store_gads_data(_id, _data):
     item = GadsSearchTerm(
         _data['Search term'],
-        _data['All conv.'],
-        string_to_float(_data['All conv. value']),
-        percent_to_float(_data['All conv. rate']),
-        0.0,
-        string_to_int(_data['Impr.']),
-        string_to_int(_data['Clicks']),
+        _data['Conversions'],
+        string_to_float(_data['Conv. value']),
+        percent_to_float(_data['Conv. rate']),
+        _data['Avg. CPC'],
+        (_data['Impressions']),
+        (_data['Clicks']),
         percent_to_float(_data['CTR']),
         _id)
     db.session.add(item)
@@ -87,5 +87,12 @@ def store_gads_data(_id, _data):
 
 
 def join_tables():
-    _table = db.session.query(GscSearchTerm, GadsSearchTerm).filter(GscSearchTerm.keys == GadsSearchTerm.search_terms).all()
+    _table = GadsSearchTerm.query.outerjoin(GscSearchTerm, GscSearchTerm.keys == GadsSearchTerm.search_terms).add_columns(
+        GadsSearchTerm.search_terms,
+        GadsSearchTerm.conversions,
+        GadsSearchTerm.conversion_value,
+        GadsSearchTerm.conversion_rate,
+        GadsSearchTerm.avg_cpc,
+        GscSearchTerm.position
+        ).all()
     return _table
