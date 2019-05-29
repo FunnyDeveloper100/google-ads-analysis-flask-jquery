@@ -13,7 +13,7 @@ from app.utils.func import string_to_float, string_to_int, percent_to_float, dol
 
 project_app = Blueprint('project_module', __name__, url_prefix='/project')
 
-@project_app.route('/add')
+@project_app.route('/add/')
 def add_project():
     project_name = request.args.get('project_name')
     property_url = request.args.get('property_url')
@@ -29,6 +29,18 @@ def add_project():
         start_date = end_date - timedelta(days=365)
         store_search_terms(project, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"))
         pull_gads_data(project, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"))
+
+    return redirect('/')
+
+@project_app.route('/edit/<id>')
+def edit_project(id):
+    if id is not None:
+        project = Project.query.filter_by(id=id).first()
+        project_name = request.args.get('project_name')
+        property_url = request.args.get('property_url')
+        country = request.args.get('country')
+        project.project_name = project_name
+        db.session.commit()
 
     return redirect('/')
 
@@ -48,6 +60,14 @@ def view_project(id):
     gads_search_terms = GadsSearchTerm.query.filter_by(project_id=id).all()
     joined_data = join_tables()
     return render_template('project/project_detail.html', project=project, gsc_keys=gsc_keys, gads_search_terms=gads_search_terms, joined_data = joined_data)
+
+@project_app.route('/delete_project/<id>/')
+def delete_project(id):
+    GscSearchTerm.query.filter_by(project_id=id).delete()
+    GadsSearchTerm.query.filter_by(project_id=id).delete()
+    Project.query.filter_by(id=id).delete()
+    db.session.commit()
+    return redirect('/')
 
 def store_search_terms(project, start_date, end_date):
     service = auth.get_service()

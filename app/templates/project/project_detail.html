@@ -4,7 +4,6 @@
     <div class="container">
         <a href="/" class="btn btn-link"> Back </a>
         <p>Project name: <b>{{ project.project_name }}</b></p>
-        <p>Country: <b>{{ project.country }}</b></p>
         <p>Property url: <b>{{ project.property_url }}</b></p>
         <form action={{ url_for('project_module.view_project', id=project.id ) }}>
             <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;"

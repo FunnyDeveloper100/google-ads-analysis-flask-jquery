@@ -16,7 +16,7 @@
     </nav>
 
     <div class="">
-        <button type="button" class="btn btn-success m-2" data-toggle="modal" data-target="#exampleModal">Add New Project</button>
+        <button type="button" class="btn btn-success m-2" data-toggle="modal" data-target="#add_new_project">Add New Project</button>
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -30,13 +30,50 @@
             <tbody>
                 {% for project in projects %}
                     <tr>
-                    <form action = {{ url_for('project_module.view_project', id=project.id ) }}>
-                        <th scope="row" name="project_id" >{{ loop.index }}</th>
-                        <td>{{ project.project_name }}</td>
-                        <td>{{ project.property_url }}</td>
-                        <td>{{ project.country }}</td>
-                        <td><button type="submit" class="btn btn-outline-dark btn-sm">View</button></td>
-                    </form>
+                        <form action = {{ url_for('project_module.view_project', id=project.id ) }}>
+                            <th scope="row" name="project_id" >{{ loop.index }}</th>
+                            <td>{{ project.project_name }}</td>
+                            <td>{{ project.property_url }}</td>
+                            <td>{{ project.country }}</td>
+                            <td>
+                                <button type="submit" class="btn btn-outline-dark btn-sm">View</button>
+                                <a href={{ url_for('project_module.delete_project', id=project.id ) }} class="btn btn-outline-danger btn-sm">Delete</a>
+                                <a class="btn btn-outline-info btn-sm" data-toggle="modal" data-target= {{ "#edit_project{}".format(project.id) }}>Edit</a>
+                            </td>
+                        </form>
+                        <div class="modal fade" id={{ "edit_project{}".format(project.id) }}  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Edit project</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form action={{ url_for('project_module.edit_project', id=project.id ) }}>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="project_name">Project Name</label>
+                                            <input type="text" class="form-control" name="project_name" placeholder="New project name" required value="{{ project.project_name }}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="property_url">Property Url</label>
+                                            <input type="text" class="form-control" name="property_url" placeholder="e.g. http://example.com" required value="{{ project.property_url}}" >
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="country">Country</label>
+                                            <br />
+                                            <select class="selectpicker countrypicker border rounded" name="country" data-default="United States" value="{{ project.country }}"></select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Edit</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -44,7 +81,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="add_new_project" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
         <div class="modal-header">
@@ -68,7 +105,6 @@
                     <br />
                     <select class="selectpicker countrypicker border rounded" name="country" data-default="United States"></select>
                 </div>
-                <input name='user_id' value = {{user['id']}} style="display:none"/>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Save</button>

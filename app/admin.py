@@ -15,7 +15,6 @@ def addAdminPanel(app):
     admin = Admin(app)
     admin.add_view(ModelView(UserModel, db.session))
     admin.add_view(ModelView(Project, db.session))
-    admin.add_view(ModelView(GscSearchTerm, db.session))
     admin.add_view(ModelView(GadsSearchTerm, db.session))
 
 
