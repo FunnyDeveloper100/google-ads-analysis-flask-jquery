@@ -34,7 +34,7 @@
                 <th scope="row" name="">{{ loop.index }}</th>
                 <td>{{ row.search_terms }}</td>
                 <td>{{ "%.1f"|format(row.position) if row.position else "0.0" }}</td>
-                <td>${{ "%.1f"|format(row.avg_cpc) }}</td>
+                <td>${{ "%.1f"|format(row.avg_cpc) if row.avg_cpc else "0.0" }}</td>
                 <td>{{ row.conversions }}</td>
                 <td>{{ row.conversion_value }}</td>
                 <td>{{ row.conversion_rate }}%</td>
