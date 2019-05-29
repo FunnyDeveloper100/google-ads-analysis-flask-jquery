@@ -107,12 +107,12 @@ def store_gads_data(_id, _data):
 
 
 def join_tables(id):
-    _table = GadsSearchTerm.query.outerjoin(GscSearchTerm, GscSearchTerm.keys == GadsSearchTerm.search_terms).add_columns(
+    _table = GadsSearchTerm.query.outerjoin(GscSearchTerm, (GscSearchTerm.project_id==id) & (GscSearchTerm.keys == GadsSearchTerm.search_terms)).add_columns(
         GadsSearchTerm.search_terms,
         GadsSearchTerm.conversions,
         GadsSearchTerm.conversion_value,
         GadsSearchTerm.conversion_rate,
         GadsSearchTerm.avg_cpc,
         GscSearchTerm.position
-        ).filter(GadsSearchTerm.project_id==id, GscSearchTerm.project_id==id).all()
+        ).filter(GadsSearchTerm.project_id==id).all()
     return _table
