@@ -44,7 +44,7 @@ def get_search_terms(
     start_date,
     end_date,
     country="world wide",
-    max_rows=2500,
+    max_rows=25,
     pages=[]):
 
     start_date = datetime.strptime(start_date, "%Y-%m-%d")
@@ -54,7 +54,6 @@ def get_search_terms(
         'startDate': start_date.strftime("%Y-%m-%d"),
         'endDate': end_date.strftime("%Y-%m-%d"),
         'dimensions': ['query'],
-        'rowLimit': max_rows,
         'dimensionFilterGroups': [
             {
                 'dimention': 'country',
