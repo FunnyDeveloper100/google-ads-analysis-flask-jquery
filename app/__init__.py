@@ -40,3 +40,7 @@ def index():
         return render_template('project/project.html', user=user_info, projects=projects)  # noqa
 
     return render_template('auth/login.html')
+
+@application.route('/privacy.html')
+def privacyhtml():
+    return render_template('privacy.html')
