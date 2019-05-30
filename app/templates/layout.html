@@ -29,8 +29,50 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#overview').DataTable({
-
+                "processing": true,
+                "dom": 'lBfrtip',
+                "buttons": [
+                    {
+                        extend: 'collection',
+                        text: 'Export',
+                        buttons: [
+                            'copy',
+                            'excel',
+                            'csv',
+                            'pdf',
+                            'print'
+                        ]
+                    }
+                ]
             });
+
+            $('#add_btn').click(function() {
+
+                $.ajax({
+                    url: '/project/add/',
+                    data: {
+                        project_name: $("#add_form input[name='project_name']").val(),
+                        property_url: $("#add_form input[name='property_url']").val(),
+                        country: $("#add_form select[name='country']").val()
+                    },
+                    success: function(response) {
+                        location.reload();
+                    },
+                    error: function(error) {
+                        console.log('error', error);
+                    }
+                })
+
+            })
+        } );
+
+        $.extend( $.fn.dataTable.ext.type.order, {
+            "file-size-asc": function ( a, b ) {
+                return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+            },
+            "file-size-desc": function ( a, b ) {
+                return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+            }
         } );
 
         $(function() {
@@ -56,22 +98,6 @@
                 }
             }, cb);
             cb(start, end);
-        });
-
-        let tabButton = [].slice.call(
-            document.querySelectorAll("ul.tab-nav li a.button-tab")
-        );
-
-        tabButton.map(button => {
-            button.addEventListener("click", () => {
-                let href = button.getAttribute("href");
-
-                document.querySelector(".active-content").classList.remove("active-content");
-                document.querySelector(href).classList.add("active-content");
-
-                document.querySelector(".active-tab").classList.remove("active-tab");
-                button.classList.add("active-tab");
-            });
         });
 
         </script>

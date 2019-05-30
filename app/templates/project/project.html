@@ -90,7 +90,8 @@
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <form action={{ url_for('project_module.add_project')}}>
+        <!-- <form action={{ url_for('project_module.add_project')}}> -->
+        <div id="add_form">
             <div class="modal-body">
                 <div class="form-group">
                     <label for="project_name">Project Name</label>
@@ -107,10 +108,12 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button id="add_btn" class="btn btn-primary" data-dismiss="modal" >Save</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             </div>
-        </form>
+        </div>
+        <!-- </form> -->
+
         </div>
     </div>
 </div>

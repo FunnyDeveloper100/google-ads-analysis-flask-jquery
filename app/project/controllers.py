@@ -1,5 +1,5 @@
 from flask import Blueprint, request, \
-    g, session, redirect, render_template
+    g, session, redirect, render_template, jsonify
 from app.auth import auth
 from app.project.models import Project
 from app.project.models import GscSearchTerm
@@ -20,8 +20,9 @@ def add_project():
     country = request.args.get('country')
     user_info = auth.get_user_info()
     project = Project(user_id=user_info['id'], project_name=project_name, property_url=property_url, country=country)  # noqa
-    db.session.add(project)
-    db.session.commit()
+    if (project is not None):
+        db.session.add(project)
+        db.session.commit()
 
     # first pull data and store to database
     if (project):
@@ -30,7 +31,8 @@ def add_project():
         store_search_terms(project, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"))
         pull_gads_data(project, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"))
 
-    return redirect('/')
+    return jsonify({'status': 'OK'})
+    #return redirect('/')
 
 @project_app.route('/edit/<id>')
 def edit_project(id):
@@ -82,8 +84,6 @@ def insert_gsc_row(row, project_id):
     db.session.add(item)
     db.session.commit()
 
-
-
 def pull_gads_data(project, start_date, end_date):
     GadsSearchTerm.query.filter_by(project_id=project.id).delete()
     gads_data = getAdsData('gads_search_terms.csv')
@@ -116,3 +116,21 @@ def join_tables(id):
         GscSearchTerm.position
         ).filter(GadsSearchTerm.project_id==id).all()
     return _table
+
+@project_app.route('/data_table/<id>')
+def data_table(id):
+    _table = join_tables(id)
+    response = []
+    for row in _table:
+        item = {
+            'index': 0,
+            'search_terms': row.search_terms,
+            'position': row.position,
+            'avg_cpc': row.avg_cpc,
+            'conversions': row.conversions,
+            'conversion_value': row.conversion_value,
+            'conversion_rate': row.conversion_rate
+        }
+        response.append(item)
+
+    return jsonify(response)
