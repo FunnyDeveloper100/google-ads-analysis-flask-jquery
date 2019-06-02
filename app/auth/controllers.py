@@ -27,7 +27,6 @@ CLIENT_SECRET = settings.CLIENT_SECRET
 AUTH_TOKEN_KEY = settings.AUTH_TOKEN_KEY
 AUTH_STATE_KEY = settings.AUTH_STATE_KEY
 DEVELOPER_TOKEN = settings.DEVELOPER_TOKEN
-CLIENT_CUSTOMER_ID = settings.CLIENT_CUSTOMER_ID
 
 google_auth = Blueprint('google_auth', __name__, url_prefix='/google')
 
@@ -75,8 +74,25 @@ def get_ads_client():
         oauth2_tokens['refresh_token']
     )
 
+    adwords_client = adwords.AdWordsClient(
+        DEVELOPER_TOKEN, oauth2_client, 'Celebration Saunas', client_customer_id='492-740-5283'
+    )
+
     print('created adwords client----------')
 
+    report_downloader = adwords_client.GetReportDownloader(version='v201809')
+    report_query = (adwords.ReportQueryBuilder()
+                  .Select('CampaignId', 'AdGroupId', 'Id', 'Criteria',
+                          'CriteriaType', 'FinalUrls', 'Impressions', 'Clicks',
+                          'Cost')
+                  .From('CRITERIA_PERFORMANCE_REPORT')
+                  .Where('Status').In('PAUSED')
+                  .During('LAST_7_DAYS')
+                  .Build())
+
+    print (report_downloader.DownloadReportAsStringWithAwql(
+        report_query, 'CSV', skip_report_header=False, skip_column_header=False,
+        skip_report_summary=False))
 
     return adwords_client
 
