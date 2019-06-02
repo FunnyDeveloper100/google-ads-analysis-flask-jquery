@@ -13,6 +13,9 @@ import functools
 import os
 import google.oauth2.credentials
 import googleapiclient.discovery
+from googleads import adwords
+from googleads import oauth2
+
 
 ACCESS_TOKEN_URI = settings.ACCESS_TOKEN_URI
 AUTHORIZATION_URL = settings.AUTHORIZATION_URL
@@ -23,6 +26,8 @@ CLIENT_ID = settings.CLIENT_ID
 CLIENT_SECRET = settings.CLIENT_SECRET
 AUTH_TOKEN_KEY = settings.AUTH_TOKEN_KEY
 AUTH_STATE_KEY = settings.AUTH_STATE_KEY
+DEVELOPER_TOKEN = settings.DEVELOPER_TOKEN
+CLIENT_CUSTOMER_ID = settings.CLIENT_CUSTOMER_ID
 
 google_auth = Blueprint('google_auth', __name__, url_prefix='/google')
 
@@ -52,7 +57,28 @@ def get_user_info():
         'oauth2', 'v2', credentials=credentials
     )
 
+    get_ads_client()
+
     return oauth2_client.userinfo().get().execute()
+
+def get_ads_client():
+    print('try to create google ads service')
+
+    if not is_logged_in():
+        raise Exception('User must be logged in')
+
+    oauth2_tokens = flask.session[AUTH_TOKEN_KEY]
+
+    oauth2_client = oauth2.GoogleRefreshTokenClient(
+        CLIENT_ID,
+        CLIENT_SECRET,
+        oauth2_tokens['refresh_token']
+    )
+
+    print('created adwords client----------')
+
+
+    return adwords_client
 
 
 def no_cache(view):
@@ -143,3 +169,4 @@ def logout():
     flask.session.pop(AUTH_STATE_KEY, None)
 
     return flask.redirect(BASE_URI, code=302)
+
