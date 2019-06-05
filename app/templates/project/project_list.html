@@ -30,14 +30,14 @@
             <tbody>
                 {% for project in projects %}
                     <tr>
-                        <form action = {{ url_for('project_module.view_project', id=project.id ) }}>
+                        <form action = {{ url_for('project_module.view', id=project.id ) }}>
                             <th scope="row" name="project_id" >{{ loop.index }}</th>
                             <td>{{ project.project_name }}</td>
                             <td>{{ project.property_url }}</td>
                             <td>{{ project.country }}</td>
                             <td>
                                 <button type="submit" class="btn btn-outline-dark btn-sm">View</button>
-                                <a href={{ url_for('project_module.delete_project', id=project.id ) }} class="btn btn-outline-danger btn-sm">Delete</a>
+                                <a href={{ url_for('project_module.delete', id=project.id ) }} class="btn btn-outline-danger btn-sm">Delete</a>
                                 <a class="btn btn-outline-info btn-sm" data-toggle="modal" data-target= {{ "#edit_project{}".format(project.id) }}>Edit</a>
                             </td>
                         </form>
@@ -50,7 +50,7 @@
                                     <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <form action={{ url_for('project_module.edit_project', id=project.id ) }}>
+                                <form action={{ url_for('project_module.edit', id=project.id ) }}>
                                     <div class="modal-body">
                                         <div class="form-group">
                                             <label for="project_name">Project Name</label>
@@ -63,7 +63,7 @@
                                         <div class="form-group">
                                             <label for="country">Country</label>
                                             <br />
-                                            <select class="form-control countrypicker border rounded" name="country" data-default="United States" value="{{ project.country }}"></select>
+                                            <select class="form-control countrypicker border rounded" name="country" data-default="{{ project.country }}"></select>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -90,7 +90,7 @@
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <!-- <form action={{ url_for('project_module.add_project')}}> -->
+        <!-- <form action={{ url_for('project_module.add')}}> -->
         <div id="add_form">
             <div class="modal-body">
                 <div class="form-group">
@@ -104,7 +104,7 @@
                 <div class="form-group">
                     <label for="country">Country</label>
                     <br />
-                    <select class="form-control countrypicker border rounded" name="country" data-live-search="true" data-default="United States"></select>
+                    <select class="form-control countrypicker border rounded" value="USA" data-role="country-selector" name="country" data-code-mode="alpha3"></select>
                 </div>
             </div>
             <div class="modal-footer">

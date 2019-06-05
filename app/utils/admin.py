@@ -3,20 +3,23 @@ from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib import sqla
 
 from werkzeug.exceptions import HTTPException
-from app.auth.models import User as UserModel
-from app.project.models import Project, GscSearchTerm, GadsSearchTerm
-from app.utils.db_models import db
+from app.db import db
 
 # BasicAuth
-from app import basic_auth
+from app.auth import basic_auth
 
+# import models
+from app.auth.models import User
+from app.project.models import Project
+from app.googlesc import GoogleSearchConsole
+from app.googleads import GoogleAdwords
 
 def addAdminPanel(app):
     admin = Admin(app)
-    admin.add_view(ModelView(UserModel, db.session))
+    admin.add_view(ModelView(User, db.session))
     admin.add_view(ModelView(Project, db.session))
-    admin.add_view(ModelView(GadsSearchTerm, db.session))
-
+    admin.add_view(ModelView(GoogleSearchConsole, db.session))
+    admin.add_view(ModelView(GoogleAdwords, db.session))
 
 class ModelView(sqla.ModelView):
     def is_accessible(self):
@@ -27,7 +30,6 @@ class ModelView(sqla.ModelView):
 
     def inaccessible_callback(self, name, **kwargs):
         return redirect(basic_auth.challenge())
-
 
 class AuthException(HTTPException):
     def __init__(self, message):

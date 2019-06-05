@@ -1,4 +1,6 @@
-from app.utils.db_models import db
+# /app/auth/models.py
+
+from app.db import db
 
 
 class User(db.Model):
@@ -11,7 +13,6 @@ class User(db.Model):
     given_name = db.Column(db.String(128), index=True, nullable=False)
     id = db.Column(db.String(128), primary_key=True, nullable=False)
     verified_email = db.Column(db.Boolean)
-    role = db.Column(db.Integer, default=0)
     projects = db.relationship('Project', backref='user')
 
     def __repr__(self):
@@ -26,4 +27,3 @@ class User(db.Model):
         self.given_name = user['given_name']
         self.id = user['id']
         self.verified_email = user['verified_email']
-        self.role = user['role']
