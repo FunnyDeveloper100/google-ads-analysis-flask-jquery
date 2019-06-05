@@ -26,7 +26,7 @@ def add():
         db.session.add(project)
         db.session.commit()
 
-    return jsonify({'status': 'OK'})
+    return redirect('/')
 
 # update project info
 @project_app.route('/edit/<id>/')

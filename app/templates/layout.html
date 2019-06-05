@@ -9,7 +9,7 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
         <link rel="stylesheet" href="/static/styles.css" />
-        <link href="static/jquery-countryselector.min.css" rel="stylesheet">
+        <link href="/static/jquery-countryselector.min.css" rel="stylesheet">
     </head>
     <body>
         <div class="offset-md-2 col-md-8">
@@ -32,7 +32,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
-    <script src="static/jquery.countrySelector.js"></script>
+    <script src="/static/jquery.countrySelector.js"></script>
     <script type="text/javascript">
         
         var is_weighted = false;
@@ -86,9 +86,10 @@
                     return b_con && b_pos
                 }
             );
+        } );
 
-            $('#add_btn').click(function() {
-
+        $('#add_btn').click(function() {
+                console.log('clicked')
                 $.ajax({
                     url: '/project/add/',
                     data: {
@@ -105,7 +106,6 @@
                 })
 
             })
-        } );
 
         $(function() {
 
