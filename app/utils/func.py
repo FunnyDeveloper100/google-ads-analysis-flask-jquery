@@ -1,24 +1,27 @@
 
-def string_to_float(_str):
-    if isinstance(_str, (int, float)):
-        return _str
-    res = float(_str.replace(',',''))
-    return res
+def removeAllSpace(_str):
+    _str = _str.replace(' ', '')
+    return _str
 
-def string_to_int(_str):
-    if isinstance(_str, (int, float)):
-        return _str
-    res = int(_str.replace(',',''))
-    return res
+def removeSigns(_str):
+    _str = _str.replace(',','')
+    _str = _str.replace('%', '')
+    _str = _str.replace('$','')
+    return _str
 
-def percent_to_float(_str):
+def str_to_float(_str):
     if isinstance(_str, (int, float)):
         return _str
-    s = _str.strip('%')
-    return string_to_float(s)
 
-def dollar_to_float(_str):
+    return float(removeSigns(_str))
+
+def str_to_int(_str):
     if isinstance(_str, (int, float)):
         return _str
-    res = float(_str.replace('$',''))
-    return res
+    removeSigns(_str)
+    return int(_str)
+
+def getStartEndDate(_str):
+    _str = removeAllSpace(_str)
+    params = _str.split('-')
+    return (params[0], params[1])
