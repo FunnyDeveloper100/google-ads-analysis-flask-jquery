@@ -59,7 +59,7 @@ def insert_row(id, row):
         conversions = row['Conversions'],
         conversion_value = func.str_to_float(row['Value / conv.']),
         conversion_rate = func.str_to_float(row['Conv. rate']),
-        avg_cpc = row['Avg. CPC'],
+        avg_cpc = func.str_to_float(row['Avg. CPC']) / 1000000.0,
         project_id = id
     )
     db.session.add(item)
