@@ -99,7 +99,11 @@
                 </div>
                 <div class="form-group">
                     <label for="property_url">Property Url</label>
-                    <input type="text" class="form-control" name="property_url" placeholder="e.g. http://example.com" required>
+                    <select class="form-control border rounded" name="property_url" >
+                        {% for property_url in property_urls %}
+                            <option value={{ property_url }}>{{ property_url }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="country">Country</label>

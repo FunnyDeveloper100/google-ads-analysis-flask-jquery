@@ -16,6 +16,18 @@ from .models import GoogleSearchConsole
 from app.auth import google_auth
 from app.db import db
 
+def get_property_urls():
+    service = google_auth.get_webmasters_service()
+    site_list = service.sites().list().execute()
+
+    # Filter for verified websites
+    verified_sites_urls = [s['siteUrl'] for s in site_list['siteEntry']
+                       if s['permissionLevel'] != 'siteUnverifiedUser'
+                          and s['siteUrl'][:4] == 'http']
+
+    # Return the URLs of all websites you are verified for.
+    return verified_sites_urls
+
 def getData(project_id):
     return GoogleSearchConsole.query.filter_by(project_id = project_id).all()
 
