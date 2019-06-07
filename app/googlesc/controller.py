@@ -16,8 +16,7 @@ from .models import GoogleSearchConsole
 from app.auth import google_auth
 from app.db import db
 
-def get_property_urls():
-    service = google_auth.get_webmasters_service()
+def get_property_urls(service):
     site_list = service.sites().list().execute()
 
     # Filter for verified websites
@@ -31,7 +30,7 @@ def get_property_urls():
 def getData(project_id):
     return GoogleSearchConsole.query.filter_by(project_id = project_id).all()
 
-def pull_search_console_data(project, start_date, end_date, max_rows=25):
+def pull_search_console_data(service, project, start_date, end_date, max_rows=25):
     start_date = datetime.strptime(start_date, "%m/%d/%Y")
     end_date = datetime.strptime(end_date, "%m/%d/%Y")
     request = {
@@ -48,17 +47,16 @@ def pull_search_console_data(project, start_date, end_date, max_rows=25):
         'rowlimit': max_rows
     }
     
-    service = google_auth.get_webmasters_service()
     response = execute_request(service, project.property_url, request)
 
     return response
 
-def store_data(project, start_date, end_date):
+def store_data(service, project, start_date, end_date):
     # delete data in database
     GoogleSearchConsole.query.filter_by(project_id = project.id).delete()
 
     # pull data from google search console server
-    response = pull_search_console_data(project, start_date, end_date)
+    response = pull_search_console_data(service, project, start_date, end_date)
 
     # save to database
     if 'rows' in response:

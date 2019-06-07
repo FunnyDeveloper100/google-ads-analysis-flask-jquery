@@ -12,8 +12,6 @@ import sys
 import pandas as pd
 from app.googlesc import GoogleSearchConsole
 
-CHUNK_SIZE = 16 * 1024
-
 def getData(project_id):
     return GoogleAdwords.query.filter_by(project_id=project_id).all()
 
@@ -43,9 +41,7 @@ def pull_adwords_data(client, start_date, end_date):
 
     return df
 
-def store_adwords(project_id, start_date, end_date):
-    client = google_auth.get_adwords_client()
-
+def store_adwords(client, project_id, start_date, end_date):
     GoogleAdwords.query.filter_by(project_id=project_id).delete()
 
     report = pull_adwords_data(client, start_date, end_date)

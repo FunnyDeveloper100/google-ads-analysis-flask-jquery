@@ -1,3 +1,5 @@
+# /app/__init__.py
+
 from app.db import db
 from app.utils import admin
 from flask import Flask, render_template
@@ -40,6 +42,7 @@ def index():
         user_info = google_auth.get_user_info()
         user_id = user_info['id']
         projects = Project.query.filter_by(user_id=user_id).all()
-        return render_template('project/project_list.html', user=user_info, projects=projects, property_urls = g_search_console.get_property_urls())
+        service = google_auth.get_webmasters_service()
+        return render_template('project/project_list.html', user=user_info, projects=projects, property_urls = g_search_console.get_property_urls(service))
     else:
         return render_template('auth/login.html')
