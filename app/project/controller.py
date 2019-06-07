@@ -64,7 +64,8 @@ def edit(id):
 # delete project by id
 @project_app.route('/delete/<id>/')
 def delete(id):
-    GoogleSearchConsole.query.filter_by(project_id=id).delete()
+    g_search_console.deleteAll(id)
+    g_adwords.deleteAll(id)
     Project.query.filter_by(id=id).delete()
     db.session.commit()
     return redirect('/')

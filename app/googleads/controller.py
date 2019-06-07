@@ -15,6 +15,9 @@ from app.googlesc import GoogleSearchConsole
 def getData(project_id):
     return GoogleAdwords.query.filter_by(project_id=project_id).all()
 
+def deleteAll(project_id):
+    GoogleAdwords.query.filter_by(project_id=project_id).delete()
+
 def pull_adwords_data(client, start_date, end_date):
 
     start_date = datetime.strptime(start_date, "%m/%d/%Y")
