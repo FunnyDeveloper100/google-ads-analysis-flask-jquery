@@ -12,8 +12,6 @@ import sys
 import pandas as pd
 from app.googlesc import GoogleSearchConsole
 
-CHUNK_SIZE = 16 * 1024
-
 def getData(project_id):
     return GoogleAdwords.query.filter_by(project_id=project_id).all()
 
@@ -50,8 +48,8 @@ def store_adwords(project_id, start_date, end_date):
 
     report = pull_adwords_data(client, start_date, end_date)
 
-    for index, row in report.iterrows():
-        insert_row(project_id, row)
+#     for index, row in report.iterrows():
+#         insert_row(project_id, row)
 
 def insert_row(id, row):
     item = GoogleAdwords(

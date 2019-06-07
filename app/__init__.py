@@ -1,3 +1,5 @@
+# /app/__init__.py
+
 from app.db import db
 from app.utils import admin
 from flask import Flask, render_template
