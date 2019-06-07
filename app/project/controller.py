@@ -12,6 +12,8 @@ from app.db import db
 from app.googlesc import g_search_console, GoogleSearchConsole
 from app.googleads import g_adwords, GoogleAdwords
 from app.utils import func
+from threading import Thread
+from flask import current_app
 
 project_app = Blueprint('project_module', __name__, url_prefix='/project')
 
@@ -76,17 +78,23 @@ def view(id):
     table = join_ads_sc(id)
     return render_template('project/project_detail.html', project=project, joined_data = table)
 
-def store_database(id, start_date, end_date):
-    project = getProjectById(id)
-    g_search_console.store_data(project, start_date, end_date)
-    g_adwords.store_adwords(id, start_date, end_date)
+# load data from google server
+def store_database(application, service, client, id, range):
+    with application.test_request_context():
+        start_date, end_date = func.getStartEndDate(range)
+        project = getProjectById(id)
+        g_search_console.store_data(service, project, start_date, end_date)
+        g_adwords.store_adwords(client, id, start_date, end_date)
 
 # newly load data
 @project_app.route('/load/<id>/')
 def load(id):
     range = request.args.get('daterange')
-    start_date, end_date = func.getStartEndDate(range)
-    store_database(id, start_date, end_date)
+    application = current_app._get_current_object()
+    service = google_auth.get_webmasters_service()
+    client = google_auth.get_adwords_client()
+    thr = Thread(target=store_database, args=[application, service, client, id, range])
+    thr.start()
     return redirect('/project/view/{}/'.format(id))
 
 # get project instance by id
