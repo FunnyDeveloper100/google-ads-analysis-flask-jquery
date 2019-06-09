@@ -2,7 +2,7 @@
 
 from app.db import db
 from app.utils import admin
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 from flask_migrate import Migrate
 from config import settings
 from app.auth import google_auth, basic_auth
@@ -39,10 +39,7 @@ def not_found(error):
 @application.route('/')
 def index():
     if google_auth.is_logged_in():
-        user_info = google_auth.get_user_info()
-        user_id = user_info['id']
-        projects = Project.query.filter_by(user_id=user_id).all()
-        service = google_auth.get_webmasters_service()
-        return render_template('project/project_list.html', user=user_info, projects=projects, property_urls = g_search_console.get_property_urls(service))
+        return redirect('/project/')
     else:
         return render_template('auth/login.html')
+

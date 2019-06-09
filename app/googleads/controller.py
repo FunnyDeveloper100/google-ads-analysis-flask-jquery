@@ -5,6 +5,7 @@ from googleads import adwords
 from .models import GoogleAdwords
 from app.auth import google_auth
 from app.db import db
+from sqlalchemy.orm import load_only
 from datetime import datetime
 from app.utils import func
 import io
@@ -15,6 +16,9 @@ from app.googlesc import GoogleSearchConsole
 def getData(project_id):
     return GoogleAdwords.query.filter_by(project_id=project_id).all()
 
+def deleteAll(project_id):
+    GoogleAdwords.query.filter_by(project_id=project_id).delete()
+
 def pull_adwords_data(client, start_date, end_date):
 
     start_date = datetime.strptime(start_date, "%m/%d/%Y")
@@ -22,14 +26,17 @@ def pull_adwords_data(client, start_date, end_date):
     start_date = start_date.strftime("%Y%m%d")
     end_date = end_date.strftime("%Y%m%d")
 
+    search_console_keys = db.session.query(GoogleSearchConsole).options(load_only('keys')).all()
+
     output = io.StringIO()
 
     report_downloader = client.GetReportDownloader(version='v201809')
-    report_query = (adwords.ReportQueryBuilder()
-        .Select('Query', 'Conversions', 'ValuePerConversion', 'ConversionRate', 'AverageCpc')
-        .From('SEARCH_QUERY_PERFORMANCE_REPORT')
-        .During(None, start_date, end_date)
-        .Build())
+
+    report_query = 'SELECT Query, Conversions, ValuePerConversion, ConversionRate, AverageCpc \
+        FROM SEARCH_QUERY_PERFORMANCE_REPORT\
+        WHERE Query \
+        IN [{}] \
+        DURING {},{}'.format(', '.join('"{0}"'.format(w) for w in search_console_keys), start_date, end_date)
 
     report = report_downloader.DownloadReportWithAwql(report_query, 'CSV', output, skip_report_header=True,
               skip_column_header=False, skip_report_summary=True)

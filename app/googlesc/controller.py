@@ -28,7 +28,10 @@ def get_property_urls(service):
     return verified_sites_urls
 
 def getData(project_id):
-    return GoogleSearchConsole.query.filter_by(project_id = project_id).all()
+    return GoogleSearchConsole.query.filter_by(project_id=project_id).all()
+
+def deleteAll(project_id):
+    GoogleSearchConsole.query.filter_by(project_id=project_id).delete()
 
 def pull_search_console_data(service, project, start_date, end_date, max_rows=25):
     start_date = datetime.strptime(start_date, "%m/%d/%Y")
@@ -53,7 +56,7 @@ def pull_search_console_data(service, project, start_date, end_date, max_rows=25
 
 def store_data(service, project, start_date, end_date):
     # delete data in database
-    GoogleSearchConsole.query.filter_by(project_id = project.id).delete()
+    GoogleSearchConsole.query.filter_by(project_id=project.id).delete()
 
     # pull data from google search console server
     response = pull_search_console_data(service, project, start_date, end_date)

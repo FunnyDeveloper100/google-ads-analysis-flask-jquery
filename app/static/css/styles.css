@@ -57,10 +57,12 @@ ul.tab-nav li a.active-tab.button-tab {
 }
 
 #reportrange {
-    display: flex;
-    flex: content;
     background: #fff;
     cursor: pointer;
-    padding: 5px 5px;
     border: 1px solid #ccc;
+}
+
+#filter{
+    display: flex;
+    justify-content: space-between;
 }
