@@ -2,14 +2,14 @@
 {% block body %}
 <div>
     <div class="container">
-        <div class='text-right'><a href="/" class="btn btn-link"> Back </a></div>
+        <div class='text-right'><a href="/project/" class="btn btn-link"> < Back </a></div>
         <div>
             <p>Project name: <b>{{ project.project_name }}</b></p>
             <p>Property url: <b>{{ project.property_url }}</b></p>
               <form action={{ url_for('project_module.load', id=project.id ) }}>
                     <div class="form-group">
                         <label for="exampleInputEmail1">Date Range </label>
-                        <input id="reportrange" name="daterange" class="d-inline-block border-1"></input>
+                        <input id="reportrange" name="daterange" class="col-md-3 d-inline-block border-1"></input>
                         <button type="submit" class="btn-outline-dark btn-sm mt-2 d-inline-block">Load</button>
                     </div>
               </form>
@@ -18,13 +18,13 @@
 
     <h3 class="text-center">Google Adwords</h3>
     
-    <div>
-        <select name="weight_sort" id="weight_sort" class='col-sm-2 custom-select custom-select-sm form-control form-control-sm mb-1'>
-            <option value='0'>Normal Sort</option>
-            <option value='1'>Weighted Sort</option>
-        </select>
-        <Label class='ml-2'> Position: </Label> <input id="pos_st" style="display: inline-block;" class='col-sm-1 form-control form-control-sm mb-1' type="number"> ~ <input id='pos_ed' style="display: inline-block;" class='col-sm-1 form-control form-control-sm mb-1' type="number">
-        <label class='ml-2'> Conversions: </label> <input id='con_st'style="display: inline-block;" class='col-sm-1 form-control form-control-sm mb-1' type="number"> ~ <input id='con_ed' style="display: inline-block;" class='col-sm-1 form-control form-control-sm mb-1' type="number">
+    <div id='filter' class="border p-3 mb-2">
+        <div>
+            <Label class='ml-2'> Position: </Label> <input id="pos_st" style="display: inline-block;" class='col-md-3 form-control form-control-sm mb-1' type="number"> ~ <input id='pos_ed' style="display: inline-block;" class='col-sm-3 form-control form-control-sm mb-1' type="number">
+        </div>
+        <div>
+            <label class='ml-2'> Conversion Rate: </label> <input id='con_st'style="display: inline-block;" class='col-md-3 form-control form-control-sm mb-1' type="number"> ~ <input id='con_ed' style="display: inline-block;" class='col-sm-3 form-control form-control-sm mb-1' type="number">
+        </div>
     </div>
 
     <table id="overview" class="table table-hover">
@@ -54,5 +54,5 @@
         </tbody>
     </table>
 </div>
-
+<script src='/static/js/project_detail.js'></script>
 {% endblock %}
