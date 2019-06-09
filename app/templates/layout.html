@@ -10,7 +10,10 @@
         <link rel="stylesheet" href="/static/css/styles.css" />
         <link href="/static/css/jquery-countryselector.min.css" rel="stylesheet">
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.css"/>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css"/>
+
     </head>
     <body>
         <div class="offset-md-2 col-md-8">
@@ -20,16 +23,67 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
-    
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <!-- datatable -->
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
     <script src="/static/js/jquery.countrySelector.js"></script>
+    <script>
+        var table = $('#overview').DataTable({
+            dom: 'lBfrtip',
+            buttons: [
+                {
+                    extend: 'collection',
+                    text: 'Export',
+                    buttons: [
+                        'excel',
+                        'csv',
+                        'pdf',
+                        'print'
+                    ]
+                }
+            ]
+        });
+
+    $.fn.dataTable.ext.search.push(
+        function( settings, data, dataIndex ) {
+            var p_st = $('#pos_st').val(), p_ed = $('#pos_ed').val();
+            var c_st = $('#con_st').val(), c_ed = $('#con_ed').val();
+
+            var position = parseFloat( data[2] ) || 0.0; // use data for the position column
+            var conv_rate = parseFloat( data[6]) || 0.0; // use data for the conversion rate
+
+            let b_pos = false
+
+            if ( ( ( p_st == '' ) && (p_ed == '' ) ) ||
+                ( ( p_st == '' ) && position <= p_ed ) ||
+                ( p_st <= position   && (p_ed == '' ) ) ||
+                ( p_st <= position   && position <= p_ed ) )
+            {
+                b_pos = true
+            }
+
+            let b_con = false
+            if ( ( ( c_st == '' ) && (c_ed == '') ) ||
+            ( c_st == '' && conv_rate <= c_ed ) ||
+            ( c_st <= conv_rate   && ( c_ed == '' ) ) ||
+            ( c_st <= conv_rate   && conv_rate <= c_ed ) )
+            {
+                b_con = true
+            }
+            return b_con && b_pos
+        }
+    );
+
+    </script>
     </body>
 </html>
