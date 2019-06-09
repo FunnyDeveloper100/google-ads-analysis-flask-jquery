@@ -10,8 +10,6 @@ from app.googleads import g_adwords, GoogleAdwords
 from app.utils import func
 from threading import Thread
 from flask import current_app
-import pandas as pd
-import functools
 
 project_app = Blueprint('project_module', __name__, url_prefix='/project')
 
@@ -45,7 +43,9 @@ def add():
         db.session.commit()
 
     storing_thread(project.id, get_last_12month())
-    
+
+    # if you want ajax response, here is solution
+    #
     # return jsonify({
     #     'project': {
     #         'id': project.id,
@@ -54,6 +54,7 @@ def add():
     #         'country': project.country
     #     }
     # })
+
     return redirect('/project/')
 
 # update project info
@@ -97,6 +98,7 @@ def store_database(application, service, client, id, date_range):
         g_search_console.store_data(service, project, start_date, end_date)
         g_adwords.store_adwords(client, id, start_date, end_date)
 
+# create thread for loading data
 def storing_thread(id, date_range, isAsync = True):
     application = current_app._get_current_object()
     service = google_auth.get_webmasters_service()
@@ -118,6 +120,7 @@ def load(id):
 def getProjectById(id):
     return Project.query.filter_by(id=id).first()
 
+# join table and weighted sort
 def join_ads_sc(id):
     _table = GoogleAdwords.query.outerjoin(GoogleSearchConsole, (GoogleSearchConsole.project_id==id) & (GoogleSearchConsole.keys == GoogleAdwords.search_terms)).add_columns(
         GoogleAdwords.search_terms,
@@ -168,7 +171,7 @@ def weighted(_table):
 def get_etv(v, b, mv, ab):
     if mv == 0:
         return 0
-    
+
     v = 0 if v is None else v
     b = 0 if b is None else b
     return v / mv * b + (1 - v / mv) * ab

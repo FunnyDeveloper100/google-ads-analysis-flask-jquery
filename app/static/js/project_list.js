@@ -1,5 +1,8 @@
 
 $(document).ready(function() {
+
+    // when you want ajax for create new project, please uncomment
+    //
     // $('#add_form').on('submit', function(event) {
     //     event.preventDefault();
     //     $.ajax({
