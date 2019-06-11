@@ -18,8 +18,6 @@ def addAdminPanel(app):
     admin = Admin(app)
     admin.add_view(ModelView(User, db.session))
     admin.add_view(ModelView(Project, db.session))
-    admin.add_view(ModelView(GoogleSearchConsole, db.session))
-    admin.add_view(ModelView(GoogleAdwords, db.session))
 
 class ModelView(sqla.ModelView):
     def is_accessible(self):

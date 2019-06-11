@@ -66,3 +66,7 @@ ul.tab-nav li a.active-tab.button-tab {
     display: flex;
     justify-content: space-between;
 }
+
+.dt-buttons {
+    margin-left: 1vw
+}
