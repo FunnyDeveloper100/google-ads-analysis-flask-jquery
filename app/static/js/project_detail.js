@@ -5,7 +5,7 @@ $(function() {
     var end = moment();
 
     function cb(start, end) {
-        $('#reportrange').val(start.format('MM/DD/YYYY') + ' - ' + end.format('MM/DD/YYYY'));
+        //$('#daterange').val(start.format('MM/DD/YYYY') + ' - ' + end.format('MM/DD/YYYY'));
     }
 
     $('#reportrange').daterangepicker({

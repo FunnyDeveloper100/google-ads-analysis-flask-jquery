@@ -70,3 +70,12 @@ ul.tab-nav li a.active-tab.button-tab {
 .dt-buttons {
     margin-left: 1vw
 }
+
+.page-selector {
+
+}
+
+.panel-body {
+    display: flex;
+    justify-content: space-between;
+}

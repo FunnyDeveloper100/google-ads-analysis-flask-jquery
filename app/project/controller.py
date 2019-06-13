@@ -44,17 +44,6 @@ def add():
 
     storing_thread(project.id, get_last_12month())
 
-    # if you want ajax response, here is solution
-    #
-    # return jsonify({
-    #     'project': {
-    #         'id': project.id,
-    #         'name': project.project_name,
-    #         'url': project.property_url,
-    #         'country': project.country
-    #     }
-    # })
-
     return redirect('/project/')
 
 # update project info
@@ -82,13 +71,50 @@ def delete(id):
     return redirect('/')
 
 # view project data by id
+@project_app.route('/view/<id>/<int:page_num>/<int:per_page>/<float:pos_st>/<float:pos_ed>/<float:con_st>/<float:con_ed>/')
 @project_app.route('/view/<id>/')
-def view(id):
+def view(id, page_num=1, per_page=10, pos_st=0, pos_ed=0, con_st=0, con_ed=0):
+    # read search parameters
+    weighted = request.args.get('weighted')
+    per_page_ = func.str_to_float(request.args.get('perf-page'))
+    pos_st_ = func.str_to_float(request.args.get('pos_st'))
+    pos_ed_ = func.str_to_float(request.args.get('pos_ed'))
+    con_st_ = func.str_to_float(request.args.get('con_st'))
+    con_ed_ = func.str_to_float(request.args.get('con_ed'))
+
+    per_page = per_page_ if per_page_ > 0 else per_page
+    pos_st = pos_st_ if pos_st_ > 0 else pos_st
+    pos_ed = pos_ed_ if pos_ed_ > 0 else pos_ed
+    con_st = con_ed_ if con_ed_ > 0 else con_st
+    con_ed = con_ed_ if con_ed_ > 0 else con_ed
+
+    # search items
     project = getProjectById(id)
     gsc_data = g_search_console.getData(id)
     gads_data = g_adwords.getData(id)
-    table = join_ads_sc(id)
-    return render_template('project/project_detail.html', project=project, joined_data = table)
+    #table = join_ads_sc(id)
+
+    # filtering data
+    table = GoogleAdwords.query.filter_by(project_id=id)\
+        .filter(
+            GoogleAdwords.position >= pos_st,
+            GoogleAdwords.conversions >= con_st
+        )\
+        .filter(GoogleAdwords.position <= pos_ed if pos_ed > 0 else True)\
+        .filter(GoogleAdwords.conversions <= con_ed if con_ed > 0 else True)\
+        .paginate(per_page=per_page, page=page_num, error_out=False)
+
+    return render_template('project/project_detail.html', 
+        project=project, 
+        joined_data = table, 
+        weighted=weighted, 
+        per_page=per_page, 
+        pos_st=pos_st, 
+        pos_ed=pos_ed,
+        con_st=con_st,
+        con_ed=con_ed
+        )
+
 
 # load data from google server
 def store_database(application, service, client, id, date_range):

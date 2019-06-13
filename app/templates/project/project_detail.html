@@ -1,33 +1,71 @@
 {% extends 'layout.html' %}
 {% block body %}
 <div>
-    <div class="container">
-        <div class='text-right'><a href="/project/" class="btn btn-link"> < Back </a></div>
-        <div>
-            <p>Project name: <b>{{ project.project_name }}</b></p>
-            <p>Property url: <b>{{ project.property_url }}</b></p>
-              <form action={{ url_for('project_module.load', id=project.id ) }}>
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Date Range </label>
-                        <input id="reportrange" name="daterange" class="col-md-3 d-inline-block border-1"></input>
-                        <button type="submit" class="btn-outline-dark btn-sm mt-2 d-inline-block">Load</button>
-                    </div>
-              </form>
+    <div class="">
+        <div class='text-right'><a href="/project/" class="btn btn-link">
+                < Back </a> </div> <div>
+                    <p>Project name: <b>{{ project.project_name }}</b></p>
+                    <p>Property url: <b>{{ project.property_url }}</b></p>
+                    <form action={{ url_for('project_module.load', id=project.id ) }}>
+                        <div class="form-group">
+                            <label for="reportrange">Date Range </label>
+                            <input id="reportrange" class="col-md-3 d-inline-block border-1"></input>
+                            <input id="daterange" name="daterange" style="display:none;" />
+                            <button type="submit" class="btn-outline-dark btn-sm mt-2 d-inline-block">Load</button>
+                        </div>
+                    </form>
         </div>
     </div>
 
     <h3 class="text-center">Google Adwords</h3>
-    
-    <div id='filter' class="border p-3 mb-2">
-        <div>
-            <Label class='ml-2'> Position: </Label> <input id="pos_st" style="display: inline-block;" class='col-md-3 form-control form-control-sm mb-1' type="number"> ~ <input id='pos_ed' style="display: inline-block;" class='col-sm-3 form-control form-control-sm mb-1' type="number">
-        </div>
-        <div>
-            <label class='ml-2'> Conversion Rate: </label> <input id='con_st'style="display: inline-block;" class='col-md-3 form-control form-control-sm mb-1' type="number"> ~ <input id='con_ed' style="display: inline-block;" class='col-sm-3 form-control form-control-sm mb-1' type="number">
+    <div class="">
+        <div class="row">
+            <div id="filter-panel" class="collapse filter-panel">
+                <div class="panel panel-default">
+                    <div class="panel-body m-1">
+                        <form class="form-inline" role="form" action={{url_for('project_module.view', id=project.id )}}>
+                            <div class="form-group mr-1">
+                                <label class="filter-col mr-2" for="pref-perpage">Advanced Sort: </label> <input
+                                    name="weighted" type="checkbox" checked data-toggle="toggle" data-offstyle="info"
+                                    data-size="sm">
+                            </div>
+                            <div class="form-group">
+                                <label class="filter-col mr-2" for="pref-perpage">Rows per page: </label>
+                                <select id="pref-perpage" name="perf-page" class="form-control" value={{ per_page }}>
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <Label class='m-1'> Position: </Label> <input name="pos_st" style="display: inline-block;"
+                                    class='col-md-2 form-control form-control-sm m-1' type="number" value={{ pos_st }}> - <input
+                                    name='pos_ed' style="display: inline-block;"
+                                    class='col-sm-2 form-control form-control-sm m-1' type="number" value={{ pos_ed }}>
+                            </div>
+                            <div class="form-group">
+                                <label class='m-1'> Conversion Rate: </label> <input name='con_st'
+                                    style="display: inline-block;" class='col-md-2 form-control form-control-sm m-1'
+                                    type="number" value={{ con_st }}> - <input name='con_ed' style="display: inline-block;"
+                                    class='col-sm-2 form-control form-control-sm m-1' type="number" value={{ con_ed }}>
+                            </div>
+                            <div class="form-group float-right">
+                                <button class="btn btn-outline-dark btn-sm" type="submit" >Apply</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#filter-panel">
+                <span class="glyphicon glyphicon-cog"></span> Advanced Option
+            </button>
         </div>
     </div>
 
-    <table id="overview" class="table table-hover">
+
+    <table id="overview" class="table table-hover mt-2">
         <thead>
             <tr>
                 <th scope="col-md-2">No</th>
@@ -40,7 +78,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for row in joined_data %}
+            {% for row in joined_data.items %}
             <tr>
                 <th scope="row" name="">{{ loop.index }}</th>
                 <td>{{ row.search_terms }}</td>
@@ -53,6 +91,49 @@
             {% endfor %}
         </tbody>
     </table>
+    <div class="float-right mb-3">
+        <div>
+            {% if joined_data.has_prev %}
+            <a class="btn btn-outline-dark"
+                href="{{ url_for('project_module.view', 
+                    id=project.id, 
+                    page_num=joined_data.prev_num, 
+                    per_page=per_page, 
+                    pos_st=pos_st, 
+                    pos_ed=pos_ed,
+                    con_st=con_st,
+                    con_ed=con_ed )}}">Prev</a>
+            {% endif %}
+            {% for page in joined_data.iter_pages(2, 1, 1, 2) %}
+            {% if page %}
+            <a class="btn btn-outline-dark"
+                href="{{ url_for('project_module.view', 
+                    id=project.id, 
+                    page_num=page,
+                    per_page=per_page, 
+                    pos_st=pos_st, 
+                    pos_ed=pos_ed,
+                    con_st=con_st,
+                    con_ed=con_ed 
+                )}}">{{ page }}</a>
+            {% else %}
+            ...
+            {% endif %}
+            {% endfor %}
+            {% if joined_data.has_next %}
+            <a class="btn btn-outline-dark"
+                href="{{ url_for('project_module.view', 
+                    id=project.id, 
+                    page_num=joined_data.next_num, 
+                    per_page=per_page, 
+                    pos_st=pos_st, 
+                    pos_ed=pos_ed,
+                    con_st=con_st,
+                    con_ed=con_ed
+                )}}">Next</a>
+            {% endif %}
+        </div>
+    </div>
 </div>
 <script src='/static/js/project_detail.js'></script>
 {% endblock %}

@@ -19,3 +19,4 @@ class Project(db.Model):
 
     def __repr__(self):
         return self.project_name
+

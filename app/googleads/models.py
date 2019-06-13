@@ -10,22 +10,26 @@ class GoogleAdwords(db.Model):
     conversion_value = db.Column(db.Float, default=0)
     conversion_rate = db.Column(db.Float)
     avg_cpc = db.Column(db.Float, default=0)
-    # impressions = db.Column(db.Integer, default=0)
-    # clicks = db.Column(db.Integer, default=0)
-    # ctr = db.Column(db.Float, default=0)
+    impressions = db.Column(db.Integer, default=0)
+    clicks = db.Column(db.Integer, default=0)
+    ctr = db.Column(db.Float, default=0)
+    cost = db.Column(db.Float, default=0.0)
+    position = db.Column(db.Integer, default=0)
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
 
     def __init__(self, search_terms, conversions, conversion_value,
-                 conversion_rate, avg_cpc, project_id):
+                 conversion_rate, avg_cpc, ctr, clicks, impressions, cost, position, project_id):
 
         self.search_terms = search_terms
         self.conversions = conversions
         self.conversion_value = conversion_value
         self.conversion_rate = conversion_rate
         self.avg_cpc = avg_cpc
-        # self.impressions = impressions
-        # self.clicks = clicks
-        # self.ctr = ctr
+        self.impressions = impressions
+        self.clicks = clicks
+        self.ctr = ctr
+        self.cost = cost
+        self.position = position
         self.project_id = project_id
 
     def __repr__(self):
