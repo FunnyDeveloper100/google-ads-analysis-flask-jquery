@@ -62,20 +62,12 @@ ul.tab-nav li a.active-tab.button-tab {
     border: 1px solid #ccc;
 }
 
-#filter{
-    display: flex;
-    justify-content: space-between;
-}
-
 .dt-buttons {
     margin-left: 1vw
 }
 
-.page-selector {
-
-}
-
-.panel-body {
+.filter-row {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
+    flex-wrap: wrap;
 }

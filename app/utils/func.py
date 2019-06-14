@@ -1,3 +1,4 @@
+import datetime
 
 def removeAllSpace(_str):
     _str = _str.replace(' ', '')
@@ -29,5 +30,29 @@ def str_to_int(_str):
 
 def getStartEndDate(_str):
     _str = removeAllSpace(_str)
+    if len(_str) < 2:
+        end_date = datetime.datetime.now()
+        start_date = end_date - datetime.timedelta(days=365)
+        range_case = int(_str)
+
+        if range_case == 0:
+            start_date = end_date - datetime.timedelta(days=7)
+        if range_case == 1:
+            start_date = end_date - datetime.timedelta(days=28)
+        if range_case == 2:
+            start_date = end_date - datetime.timedelta(days=90)
+        if range_case == 3:
+            start_date = end_date - datetime.timedelta(days=180)
+        if range_case == 4:
+            start_date = end_date - datetime.timedelta(days=365)
+        if range_case == 5:
+            start_date = end_date - datetime.timedelta(days=480)
+
+        start = start_date.strftime("%m/%d/%Y")
+        end = end_date.strftime("%m/%d/%Y")
+
+        return (start, end)
+
     params = _str.split('-')
+
     return (params[0], params[1])

@@ -1,6 +1,6 @@
 # /app/googleads/models.py
 from app.db import db
-
+from sqlalchemy.ext.hybrid import hybrid_method
 
 class GoogleAdwords(db.Model):
     __tablename__ = 'google_adwords'
@@ -34,3 +34,13 @@ class GoogleAdwords(db.Model):
 
     def __repr__(self):
         return self.search_terms
+
+    @hybrid_method
+    def weight(self, mv, ab):
+        if mv == 0:
+            return 0
+
+        v = 0 if self.position is None else self.position
+        b = 0 if self.conversion_rate is None else self.conversion_rate
+
+        return v / mv * b + (1 - v / mv) * ab

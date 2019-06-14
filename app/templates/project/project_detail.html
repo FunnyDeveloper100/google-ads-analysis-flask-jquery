@@ -3,17 +3,16 @@
 <div>
     <div class="">
         <div class='text-right'><a href="/project/" class="btn btn-link">
-                < Back </a> </div> <div>
-                    <p>Project name: <b>{{ project.project_name }}</b></p>
-                    <p>Property url: <b>{{ project.property_url }}</b></p>
-                    <form action={{ url_for('project_module.load', id=project.id ) }}>
-                        <div class="form-group">
-                            <label for="reportrange">Date Range </label>
-                            <input id="reportrange" class="col-md-3 d-inline-block border-1"></input>
-                            <input id="daterange" name="daterange" style="display:none;" />
-                            <button type="submit" class="btn-outline-dark btn-sm mt-2 d-inline-block">Load</button>
-                        </div>
-                    </form>
+            < Back </a> </div> <div>
+                <p>Project name: <b>{{ project.project_name }}</b></p>
+                <p>Property url: <b>{{ project.property_url }}</b></p>
+                <form action={{ url_for('project_module.load', id=project.id ) }}>
+                    <div class="form-group">
+                        <label for="reportrange">Date Range </label>
+                        <input id="reportrange" name="daterange" class="form-control col-sm-3 border-1"></input>
+                        <button type="submit" class="btn-outline-dark btn-sm mt-2 d-inline-block">Load</button>
+                    </div>
+                </form>
         </div>
     </div>
 
@@ -22,37 +21,36 @@
         <div class="row">
             <div id="filter-panel" class="collapse filter-panel">
                 <div class="panel panel-default">
-                    <div class="panel-body m-1">
+                    <div class="panel-body mb-1 ">
                         <form class="form-inline" role="form" action={{url_for('project_module.view', id=project.id )}}>
-                            <div class="form-group mr-1">
-                                <label class="filter-col mr-2" for="pref-perpage">Advanced Sort: </label> <input
-                                    name="weighted" type="checkbox" checked data-toggle="toggle" data-offstyle="info"
-                                    data-size="sm">
-                            </div>
-                            <div class="form-group">
-                                <label class="filter-col mr-2" for="pref-perpage">Rows per page: </label>
-                                <select id="pref-perpage" name="perf-page" class="form-control" value={{ per_page }}>
-                                    <option value="5">5</option>
-                                    <option value="10">10</option>
-                                    <option value="20">20</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <Label class='m-1'> Position: </Label> <input name="pos_st" style="display: inline-block;"
-                                    class='col-md-2 form-control form-control-sm m-1' type="number" value={{ pos_st }}> - <input
-                                    name='pos_ed' style="display: inline-block;"
-                                    class='col-sm-2 form-control form-control-sm m-1' type="number" value={{ pos_ed }}>
-                            </div>
-                            <div class="form-group">
-                                <label class='m-1'> Conversion Rate: </label> <input name='con_st'
-                                    style="display: inline-block;" class='col-md-2 form-control form-control-sm m-1'
-                                    type="number" value={{ con_st }}> - <input name='con_ed' style="display: inline-block;"
-                                    class='col-sm-2 form-control form-control-sm m-1' type="number" value={{ con_ed }}>
-                            </div>
-                            <div class="form-group float-right">
-                                <button class="btn btn-outline-dark btn-sm" type="submit" >Apply</button>
+                            <div class="filter-row" >
+                                <div class="form-group" >
+                                    <label class="mr-1" for="pref-perpage"> Rows per page: </label>
+                                    <select id="pref-perpage" name="perf-page" class="form-control" value={{ per_page }}>
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                </div>
+                                <div class="form-group ml-3">
+                                    <Label class='m-1'> Position: </Label> <input name="pos_st" style="display: inline-block;"
+                                        class='col-sm-2 form-control form-control-sm m-1' type="number" value={{ pos_st }}> - <input
+                                        name='pos_ed' style="display: inline-block;"
+                                        class='col-sm-2 form-control form-control-sm m-1' type="number" value={{ pos_ed }}>
+                                    <label class='m-1'> Conversion Rate: </label> <input name='con_st'
+                                        style="display: inline-block;" class='col-sm-2 form-control form-control-sm m-1'
+                                        type="number" value={{ con_st }}> - <input name='con_ed' style="display: inline-block;"
+                                        class='col-sm-2 form-control form-control-sm m-1' type="number" value={{ con_ed }}>
+                                </div>
+                                <div class="form-group">
+                                    <label class="filter-col mr-1" for="pref-perpage">Wighted Sort: </label> 
+                                    <input name="weighted" type="checkbox" checked data-toggle="toggle" data-offstyle="info" data-size="sm">
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-outline-dark btn-sm ml-3" type="submit" >Apply</button>
+                                </div>
                             </div>
                         </form>
                     </div>
