@@ -37,13 +37,13 @@ def getStartEndDate(_str):
         #     start_date = end_date - datetime.timedelta(days=7)
         # if _str == 1:
         #     start_date = end_date - datetime.timedelta(days=28)
-        if _str < 2:
+        if int(_str) < 2:
             start_date = end_date - datetime.timedelta(days=90)
-        if _str == 3:
+        if int(_str) == 3:
             start_date = end_date - datetime.timedelta(days=180)
-        if _str == 4:
+        if int(_str) == 4:
             start_date = end_date - datetime.timedelta(days=365)
-        if _str == 5:
+        if int(_str) == 5:
             start_date = end_date - datetime.timedelta(days=480)
 
         start = start_date.strftime("%m/%d/%Y")
