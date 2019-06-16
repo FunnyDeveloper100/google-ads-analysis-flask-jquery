@@ -97,19 +97,19 @@ def view(id, page_num=1, per_page=10, pos_st=0, pos_ed=0, con_st=0, con_ed=0):
     _table = GoogleAdwords.query.filter_by(project_id=id).all()
     mv, ab = getMaxPos_Rate(_table)
 
-    # filtering data
-    table = GoogleAdwords.query.filter_by(project_id=id)\
-        .filter(
-            GoogleAdwords.position >= pos_st,
-            GoogleAdwords.conversions >= con_st
-        )\
-        .filter(GoogleAdwords.position <= pos_ed if pos_ed > 0 else True)\
-        .filter(GoogleAdwords.conversions <= con_ed if con_ed > 0 else True)\
-        .order_by(GoogleAdwords.weight(mv, ab).desc())\
-        .paginate(per_page=per_page, page=page_num, error_out=False)
+    if mv > 0:
+        # filtering data
+        table = GoogleAdwords.query.filter_by(project_id=id)\
+            .filter(
+                GoogleAdwords.position >= pos_st,
+                GoogleAdwords.conversions >= con_st
+            )\
+            .filter(GoogleAdwords.position <= pos_ed if pos_ed > 0 else True)\
+            .filter(GoogleAdwords.conversions <= con_ed if con_ed > 0 else True)\
+            .order_by(GoogleAdwords.weight(mv, ab).desc())\
+            .paginate(per_page=per_page, page=page_num, error_out=False)
 
     if weighted == "off" or weighted is None:
-        print(weighted)
         table = GoogleAdwords.query.filter_by(project_id=id)\
             .filter(
                 GoogleAdwords.position >= pos_st,
@@ -154,7 +154,6 @@ def storing_thread(id, date_range, isAsync = False):
 @project_app.route('/load/<id>/')
 def load(id):
     date_range = request.args.get('daterange')
-    print(date_range)
     storing_thread(id, date_range)
     return redirect('/project/view/{}/'.format(id))
 

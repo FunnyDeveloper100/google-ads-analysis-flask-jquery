@@ -9,7 +9,14 @@
                 <form action={{ url_for('project_module.load', id=project.id ) }}>
                     <div class="form-group">
                         <label for="reportrange">Date Range </label>
-                        <input id="reportrange" name="daterange" class="form-control col-sm-3 border-1"></input>
+                        <select name="daterange" class="form-group">
+                            <option value="0">Last 7 days</option>
+                            <option value="1">Last 28 days</option>
+                            <option value="2">Last 3 months</option>
+                            <option value="3">Last 6 months</option>
+                            <option value="4">Last 12 months</option>
+                            <option value="6">Last 16 months</option>
+                        </select>
                         <button type="submit" class="btn-outline-dark btn-sm mt-2 d-inline-block">Load</button>
                     </div>
                 </form>

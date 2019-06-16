@@ -29,29 +29,29 @@ def str_to_int(_str):
     return int(_str)
 
 def getStartEndDate(_str):
-    _str = removeAllSpace(_str)
     if len(_str) < 2:
         end_date = datetime.datetime.now()
         start_date = end_date - datetime.timedelta(days=365)
-        range_case = int(_str)
 
-        if range_case == 0:
-            start_date = end_date - datetime.timedelta(days=7)
-        if range_case == 1:
-            start_date = end_date - datetime.timedelta(days=28)
-        if range_case == 2:
+        # if _str == 0:
+        #     start_date = end_date - datetime.timedelta(days=7)
+        # if _str == 1:
+        #     start_date = end_date - datetime.timedelta(days=28)
+        if _str < 2:
             start_date = end_date - datetime.timedelta(days=90)
-        if range_case == 3:
+        if _str == 3:
             start_date = end_date - datetime.timedelta(days=180)
-        if range_case == 4:
+        if _str == 4:
             start_date = end_date - datetime.timedelta(days=365)
-        if range_case == 5:
+        if _str == 5:
             start_date = end_date - datetime.timedelta(days=480)
 
         start = start_date.strftime("%m/%d/%Y")
         end = end_date.strftime("%m/%d/%Y")
 
         return (start, end)
+
+    _str = removeAllSpace(_str)
 
     params = _str.split('-')
 

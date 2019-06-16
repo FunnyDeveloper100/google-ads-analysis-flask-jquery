@@ -32,7 +32,11 @@
                     <tr>
                         <form action = {{ url_for('project_module.view', id=project.id ) }}>
                             <th scope="row" name="project_id" >{{ loop.index }}</th>
-                            <td>{{ project.project_name }}</td>
+                            <td>
+                                <a href={{ url_for('project_module.view', id=project.id ) }}>
+                                    {{ project.project_name }}
+                                </a>
+                            </td>
                             <td>{{ project.property_url }}</td>
                             <td>{{ project.country }}</td>
                             <td>

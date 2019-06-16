@@ -41,7 +41,6 @@ def pull_adwords_data(client, start_date, end_date):
               skip_column_header=False, skip_report_summary=True)
 
     output.seek(0)
-    
     df = pd.read_csv(output)
     df.head()
 
@@ -57,7 +56,7 @@ def store_adwords(client, project_id, start_date, end_date):
 
 def insert_row(id, row):
     search_term = row['Search term']
-    gsc = GoogleSearchConsole.query.filter_by(keys=search_term).one()
+    gsc = GoogleSearchConsole.query.filter_by(keys=search_term).first()
     position = gsc.position
     item = GoogleAdwords(
         search_terms = row['Search term'],
