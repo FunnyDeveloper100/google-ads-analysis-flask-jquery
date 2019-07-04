@@ -14,7 +14,7 @@ Livesite url: `https://deeperinsights.io`
 [wighted sort algorithm](https://moz.com/blog/build-your-own-weighted-sort)
 
 # information
-- Developer token: 5nm-gMTkMMg-o06Enc7IMw
-- IP Address: 188.166.167.151
+- Developer token: 5nm-gMTkMMg-o06Enc7IM-w
+- IP Address: 0-188.166.167.151
 - Username: root
-- Password: AlexUpwork4eva
+- Password: A-lexUpwork4eva
