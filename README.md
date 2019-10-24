@@ -8,7 +8,7 @@ Google Ads allows us to see conversion data for the search terms (conversions an
 Search console allows us to see the search POSITION of keywords.
 This app display a pivot table allowing users to merge those two data sets on the search term so both the conversions, conversion value and position can be seen in one view.
 
-Livesite url: `https://deeperinsights.io`
+Livesite url: [https://deeperinsights.io](https://deeperinsights.io)
 
 # reference
 [wighted sort algorithm](https://moz.com/blog/build-your-own-weighted-sort)
